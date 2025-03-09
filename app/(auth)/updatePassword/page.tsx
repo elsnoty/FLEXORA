@@ -7,11 +7,11 @@ import { passwordSchema } from '@/utils/validation/PasswordValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from "react-hook-form";
 
 
-const updatePassword = () => {
+const UpdatePassword = () => {
   const [message, setMessage] = useState('')
   const supabse = createClient()
   const [loading, setLoading] = useState(false);
@@ -73,4 +73,4 @@ const updatePassword = () => {
   )
 }
 
-export default updatePassword
+export default UpdatePassword
