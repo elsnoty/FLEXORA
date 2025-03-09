@@ -4,6 +4,11 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next();
 
+  // Allow Supabase OAuth callback to pass through
+  if (request.nextUrl.pathname.startsWith("/auth/callback")) {
+    return response; // Don't block Supabase callback
+  }
+
   // Initialize Supabase client
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,7 +28,7 @@ export async function updateSession(request: NextRequest) {
   // Ensure the user session is updated
   const { data: { user } } = await supabase.auth.getUser();
 
-  const authRoutes = ["/login", "/signup", "/auth", "/resetPassword", "/updatePassword"];
+  const authRoutes = ["/login", "/signup", "/resetPassword", "/updatePassword"];
   const isAuthPage = authRoutes.some((route) => request.nextUrl.pathname.startsWith(route));
 
   if (!user && !isAuthPage) {
@@ -36,10 +41,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-
   return response;
 }
-
 
 export const config = {
   matcher: ["/:path*"],
