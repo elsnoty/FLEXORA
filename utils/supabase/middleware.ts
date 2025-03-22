@@ -6,7 +6,7 @@ export async function updateSession(request: NextRequest) {
 
   // Allow Supabase OAuth callback to pass through
   if (request.nextUrl.pathname.startsWith("/auth/callback")) {
-    return response; // Don't block Supabase callback
+    return response;
   }
 
   // Initialize Supabase client
@@ -17,9 +17,11 @@ export async function updateSession(request: NextRequest) {
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (cookiesToSet) => {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            response.cookies.set(name, value, options);
-          });
+          if (cookiesToSet.length > 0) { // ✅ Prevent setting empty cookies
+            cookiesToSet.forEach(({ name, value, options }) => {
+              response.cookies.set(name, value, options);
+            });
+          }
         },
       },
     }
@@ -32,18 +34,12 @@ export async function updateSession(request: NextRequest) {
   const isAuthPage = authRoutes.some((route) => request.nextUrl.pathname.startsWith(route));
 
   if (!user && !isAuthPage) {
-    // Redirect non-authenticated users trying to access protected routes
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (user && isAuthPage) {
-    // Redirect authenticated users away from auth pages
     return NextResponse.redirect(new URL("/", request.url));
   }
 
   return response;
 }
-
-export const config = {
-  matcher: ["/:path*"],
-};

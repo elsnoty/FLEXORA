@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const SignupSchema = z.object({
+export const AuthSchema = z.object({
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters long." })

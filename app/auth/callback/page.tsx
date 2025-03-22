@@ -14,9 +14,16 @@ export default function AuthCallback() {
 
       if (error) {
         console.error("Auth callback error:", error);
+        router.replace("/login");
+        return;
       }
 
-      router.replace(data.session ? "/" : "/login");
+      const session = data?.session;
+      if (session?.provider_token) {
+        sessionStorage.setItem("googleAccessToken", session.provider_token); // 👈 استخدام Session Storage
+      }
+
+      router.replace(session ? "/" : "/login");
     };
 
     handleAuth();

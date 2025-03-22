@@ -1,43 +1,64 @@
 'use client'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { createClient } from '@/utils/supabase/client'
-import { passwordSchema } from '@/utils/validation/PasswordValidation'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
 import { useForm } from "react-hook-form";
-
+import { zodResolver } from '@hookform/resolvers/zod';
+import { passwordSchema } from '@/utils/validation/PasswordValidation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 
 const UpdatePassword = () => {
-  const [message, setMessage] = useState('')
-  const supabse = createClient()
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter()
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const supabase = createClient();
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ password: string }>({resolver: zodResolver(passwordSchema),});
+  } = useForm<{ password: string }>({ resolver: zodResolver(passwordSchema) });
 
-  const handleUpdate = async (data: { password: string }) =>{
-    setMessage('')
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.replace('/login'); // Redirect if not logged in
+      } else {
+        setIsAuthenticated(true);
+      }
+    };
+    checkUser();
+  }, []);
+
+  const handleUpdate = async (data: { password: string }) => {
+    setMessage('');
     setLoading(true);
 
-    const {error } = await supabse.auth.updateUser({password: data.password})
+    const { error } = await supabase.auth.updateUser({ password: data.password });
     if (error) {
       setMessage("❌ Error: " + error.message);
-    }else{
+    } else {
       setMessage("✅ Password updated successfully! Redirecting...");
       setTimeout(() => router.push("/"), 2000);
     }
     setLoading(false);
+  };
+
+  if (isAuthenticated === null) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="animate-spin w-10 h-10 text-gray-500" />
+      </div>
+    );
   }
+
   return (
-<div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <Card className="w-full max-w-md p-6 shadow-lg bg-white rounded-xl">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold text-gray-800">
@@ -60,7 +81,7 @@ const UpdatePassword = () => {
                 <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
-    
+
             <Button type="submit" disabled={loading} className="w-full bg-green-600 hover:bg-green-700">
               {loading ? <Loader2 className="animate-spin" /> : "Update Password"}
             </Button>
@@ -70,7 +91,7 @@ const UpdatePassword = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default UpdatePassword
+export default UpdatePassword;
