@@ -13,13 +13,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import StarryBackground from "@/components/StaryBg";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {useShowPassword, useLoadingState} from "@/hooks/ShowPassword";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useToast } from "@/hooks/use-toast";
+
 
 type SignupFormValues = z.infer<typeof AuthSchema>;
 
 export default function Signup() {
-  const [showPassword, setShowPassword] = useState(false);
+  const {showPassword, setShowPassword} = useShowPassword() 
+  const {isSubmitting, setIsSubmitting} = useLoadingState();
   const [error, setError] = useState<string | null>(null);
-
+  const {toast} = useToast()
+  
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(AuthSchema),
     defaultValues: {
@@ -29,17 +35,27 @@ export default function Signup() {
   });
 
   const onSubmit = async (data: SignupFormValues) => {
-    setError(null);
-    const formData = new FormData();
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-
-    const result = await signup(formData);
-
+    setIsSubmitting(true)
+    setError(null)
+    const formData = new FormData()
+    formData.append("email", data.email)
+    formData.append("password", data.password)
+  
+    const result = await signup(formData)
+  
     if (result?.error) {
-      setError(result.error);
+      setError(result.error)
+      setIsSubmitting(false)
+    } else if (result?.success) {
+      form.reset()
+      toast({
+        title: "Check your email 📬",
+        description: result.success,
+        duration: 3500,
+      })
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center relative overflow-hidden p-7 ">
@@ -88,8 +104,15 @@ export default function Signup() {
                   <FormMessage />
                 </FormItem>
               )} />
-              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 transition">
-                Sign Up
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-700 transition">
+              {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        Sign Up...
+                        <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 text-white" />
+                      </span>
+                    ) : (
+                      "Sign Up"
+                    )}
               </Button>
             </form>
           </Form>

@@ -16,12 +16,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { AuthSchema } from "@/utils/validation/SignupValidation";
 import StarryBackground from "@/components/StaryBg";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import {useShowPassword, useLoadingState} from "@/hooks/ShowPassword";
 
 type LoginFormValues = z.infer<typeof AuthSchema>;
 
 export default function Login() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {showPassword, setShowPassword} = useShowPassword()
+  const {isSubmitting, setIsSubmitting} = useLoadingState();
   const [serverError, setServerError] = useState<string | null>(null);
   
   const form = useForm<LoginFormValues>({
@@ -35,13 +37,14 @@ export default function Login() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsSubmitting(true);
     setServerError(null);
-
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
     const result = await loginAction(formData);
     if (result?.error) {
       setServerError(result.error);
+      setIsSubmitting(false); 
+      return;
     }
   }
   
@@ -132,7 +135,14 @@ export default function Login() {
                 className="w-full bg-gradient-to-r from-gray-700 to-gray-500 hover:from-gray-600 hover:to-gray-400 transition text-black font-semibold"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Logging in..." : "Log In"}
+                {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        Logging in...
+                        <AiOutlineLoading3Quarters className="animate-spin h-5 w-5 text-white" />
+                      </span>
+                    ) : (
+                      "Log In"
+                    )}
               </Button>
             </form>
           </Form>

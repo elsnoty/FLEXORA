@@ -19,11 +19,31 @@ export default function AuthCallback() {
       }
 
       const session = data?.session;
-      if (session?.provider_token) {
-        sessionStorage.setItem("googleAccessToken", session.provider_token); // 👈 استخدام Session Storage
+      if (!session) {
+        router.replace("/login");
+        return;
       }
 
-      router.replace(session ? "/" : "/login");
+      if (session.provider_token) {
+        sessionStorage.setItem("googleAccessToken", session.provider_token);
+      }
+
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role, name")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (profileError || !profile?.role || !profile?.name) {
+        router.replace("/select_role");
+        return;
+      }
+
+      if (profile.role === "trainer") {
+        router.replace("/dashboard/trainer");
+      } else if (profile.role === "trainee") {
+        router.replace("/dashboard/trainee");
+      }
     };
 
     handleAuth();
