@@ -1,8 +1,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { signout } from "./(auth)/signout/page";
-import DeleteUserButton from "./home/page";
+import DeleteUserButton from "../components/home/page";
 import { toast } from "@/hooks/use-toast";
-import { OnToast } from "./home/TEstCmop";
+import { OnToast } from "../components/home/TEstCmop";
 
 export default async function Home() {
 

@@ -9,18 +9,24 @@ export default {
   ],
   theme: {
   	extend: {
-		backgroundImage: {
-			grid: "linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px)",
-		  },
-		animation: {
-			breathe: "breathe 4s infinite ease-in-out",
-		  },
-		  keyframes: {
-			breathe: {
-			  "0%, 100%": { transform: "scale(1)", opacity: "0.8" },
-			  "50%": { transform: "scale(1.05)", opacity: "1" },
-			},
-		},
+  		backgroundImage: {
+  			grid: 'linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px)'
+  		},
+  		animation: {
+  			breathe: 'breathe 4s infinite ease-in-out'
+  		},
+  		keyframes: {
+  			breathe: {
+  				'0%, 100%': {
+  					transform: 'scale(1)',
+  					opacity: '0.8'
+  				},
+  				'50%': {
+  					transform: 'scale(1.05)',
+  					opacity: '1'
+  				}
+  			}
+  		},
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -61,6 +67,16 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		borderRadius: {

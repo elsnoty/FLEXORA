@@ -11,7 +11,7 @@ export async function selectRoleAction(formData: FormData): Promise<ActionRespon
     const data = {
         name: formData.get("name") as string,
         role: formData.get("role") as string,
-        gender:formData.get("gender") as string
+        gender: formData.get("gender") as string
     };
 
     const validationResult = SelectRoleSchema.safeParse(data);
@@ -30,10 +30,22 @@ export async function selectRoleAction(formData: FormData): Promise<ActionRespon
         return { error: "User not found" };
     }
 
-    // Update the user's profile with the selected role and name
+    // Determine avatar URL
+    let avatarUrl = 'https://pxcfqkigxjrevuqkniwu.supabase.co/storage/v1/object/public/avatar//body1.png'; // Your default avatar
+    if (user.app_metadata?.provider === 'google') {
+        avatarUrl = user.user_metadata?.picture || avatarUrl;
+    }
+
+    // Update profile with avatar
     const { error: profileError } = await supabase
         .from("profiles")
-        .upsert({ user_id: user.id, role, name, gender })
+        .upsert({ 
+            user_id: user.id, 
+            role, 
+            name, 
+            gender,
+            avatar_url: avatarUrl
+        })
         .eq("user_id", user.id);
 
     if (profileError) {

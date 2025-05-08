@@ -57,7 +57,7 @@ export async function updateSession(request: NextRequest) {
 
     if (hasCompleteProfile) {
       // Define the user's allowed dashboard prefix based on their role
-      const allowedPrefix = `/dashboard/${profile.role}`;
+      const allowedPrefix = `/${profile.role}`;
       const isAllowedRoute = request.nextUrl.pathname.startsWith(allowedPrefix);
 
       if (isAuthPage || isSelectRolePage) {
@@ -68,14 +68,14 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(new URL(allowedPrefix, request.url));
       }
 
-      const isTrainerRoute = request.nextUrl.pathname.startsWith("/dashboard/trainer");
-      const isTraineeRoute = request.nextUrl.pathname.startsWith("/dashboard/trainee");
+      const isTrainerRoute = request.nextUrl.pathname.startsWith("/trainer");
+      const isTraineeRoute = request.nextUrl.pathname.startsWith("/trainee");
 
       if (profile.role === "trainer" && isTraineeRoute) {
-        return NextResponse.redirect(new URL("/dashboard/trainer", request.url));
+        return NextResponse.redirect(new URL("/trainer", request.url));
       }
       if (profile.role === "trainee" && isTrainerRoute) {
-        return NextResponse.redirect(new URL("/dashboard/trainee", request.url));
+        return NextResponse.redirect(new URL("/trainee", request.url));
       }
     }
   }
