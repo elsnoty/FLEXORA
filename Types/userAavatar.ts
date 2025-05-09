@@ -1,4 +1,4 @@
-export interface Profile {
+export interface ProfileAvatarH {
     id: string;
     avatar_url: string ;
     name: string;

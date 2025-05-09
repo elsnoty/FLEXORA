@@ -16,6 +16,7 @@ import {
   Menu,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const links = [
@@ -27,7 +28,16 @@ const links = [
 
 export default function SidebarTrainee() {
     const [open, setOpen] = useState(false);
+    const router = useRouter();
 
+    const handleLogout = async () => {
+      const res = await fetch("/api/logout", { method: "POST" });
+      if (res.ok) {
+        router.push("/login");
+      } else {
+        router.push("/error");
+      }
+    };
     return (
         <>
         {/* Mobile Toggle */}
@@ -89,13 +99,13 @@ export default function SidebarTrainee() {
         </nav>
 
         {/* Bottom Logout */}
-        <Link
-        href="/auth/logout"
+        <button
+        onClick={handleLogout}
         className="flex items-center gap-3 text-sm font-medium text-red-500"
         >
         <LogOut className="h-5 w-5" />
         Logout
-        </Link>
+        </button>
     </div>
     </aside>
         </>

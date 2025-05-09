@@ -1,21 +1,33 @@
 'use client';
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
-import CropModal from "@/components/Trainee_comp/cropModal";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { useProfileUpdate } from "@/hooks/use-profileUpdate";
+import AvatarUpload from "@/components/Trainee_comp/AvatarUploader";
+import ProfileForm from "@/components/Trainee_comp/profileForm";
+import ProfileHeader from "@/components/Trainee_comp/profileHeader";
+import ProfileDetails from "@/components/Trainee_comp/profileDetails";
+import dynamic from 'next/dynamic';
+import { Profile } from "@/Types/profiles";
+import type { ProfileFormValues } from "@/components/Trainee_comp/profileForm";
 
-export default function TraineeProfile({ profile }: { profile: { id: number; name: string; avatar_url: string; } }) {
-  const [name, setName] = useState(profile.name);
+const CropModal = dynamic(() => import('@/components/Trainee_comp/cropModal'), { ssr: false });
+
+export default function TraineeProfile({ profile }: { profile: Profile }) {
   const [file, setFile] = useState<File | null>(null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const { handleSubmit, isLoading, error } = useProfileUpdate();
 
-  // Open crop modal when file is selected
+  const defaultValues: ProfileFormValues = {
+    name: profile.name,
+    bio: profile.bio || '',
+    height: profile.height|| null,
+    weight: profile.weight || null,
+    location: profile.location || '',
+    phone_number: profile.phone_number || ''
+  };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -24,62 +36,50 @@ export default function TraineeProfile({ profile }: { profile: { id: number; nam
     }
   };
 
+  const handleFormSubmit = async (data: ProfileFormValues): Promise<void> => {
+    await handleSubmit(data, file);
+  };
+
   return (
     <div className="w-full px-4 mt-10">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Your Profile</CardTitle>
-          <CardDescription>Update your name or avatar</CardDescription>
+          <CardDescription>Here's your personal information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex items-center gap-6">
-            <Dialog>
-              <DialogTrigger asChild>
-                <Avatar className="w-20 h-20 cursor-pointer hover:opacity-80 rounded-full">
-                  <AvatarImage src={file ? URL.createObjectURL(file) : profile.avatar_url} />
-                  <AvatarFallback>NA</AvatarFallback>
-                </Avatar>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogTitle>Preview</DialogTitle>
-                <DialogDescription />
-                <img
-                  src={file ? URL.createObjectURL(file) : profile.avatar_url}
-                  alt="Full Avatar"
-                  className="rounded-full w-64 h-64 object-cover"
+          <ProfileHeader profile={profile} />
+          <ProfileDetails profile={profile} />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button className="mt-4">Update Profile</Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="overflow-y-auto max-h-screen w-full sm:max-w-md">
+              <SheetHeader>
+                <SheetTitle>Edit Profile</SheetTitle>
+                <SheetDescription>
+                  Make changes and save your profile information.
+                </SheetDescription>
+              </SheetHeader>
+              <div className="mt-6 space-y-6">
+                <AvatarUpload
+                  file={file}
+                  profile={profile}
+                  handleFileChange={handleFileChange}
+                  isLoading={isLoading}
                 />
-              </DialogContent>
-            </Dialog>
-            <div>
-              <Label htmlFor="avatarUpload">Change Avatar</Label>
-              <Input
-                id="avatarUpload"
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                disabled={isLoading}
-              />
-            </div>
-          </div>
-
-          <form onSubmit={(e) => handleSubmit(e, name, file)} className="space-y-4">
-            <div>
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={isLoading}
-              />
-            </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? 'Saving...' : 'Save Changes'}
-            </Button>
-          </form>
+                <ProfileForm
+                  defaultValues={defaultValues}
+                  handleSubmit={handleFormSubmit}
+                  isLoading={isLoading}
+                  error={error}
+                  file={file}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
         </CardContent>
       </Card>
-
       <CropModal
         file={file}
         isOpen={isCropModalOpen}

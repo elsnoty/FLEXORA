@@ -5,10 +5,10 @@ import { ToggleTheme } from "@/utils/toggle-theme";
 import Link from "next/link";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Profile } from "@/Types/userAavatar";
+import { ProfileAvatarH } from "@/Types/userAavatar";
 
 interface HeaderTraineeProps {
-  ownProfile: Profile | null;
+  ownProfile: ProfileAvatarH | null;
 }
 
 export default function HeaderTrainee({ ownProfile }: HeaderTraineeProps) {

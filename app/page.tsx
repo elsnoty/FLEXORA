@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { signout } from "./(auth)/signout/page";
+import { signout } from "./(auth)/signout/action";
 import DeleteUserButton from "../components/home/page";
 import { toast } from "@/hooks/use-toast";
 import { OnToast } from "../components/home/TEstCmop";
