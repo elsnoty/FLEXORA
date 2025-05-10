@@ -9,5 +9,5 @@ export interface Profile {
     location?: string | null;
     phone_number?: string | null;
     email?: string;
-    
+    gender: string;
 }

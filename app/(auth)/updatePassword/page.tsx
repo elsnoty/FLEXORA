@@ -33,7 +33,7 @@ const UpdatePassword = () => {
       }
     };
     checkUser();
-  }, []);
+  }, [router, supabase]);
 
   const handleUpdate = async (data: { password: string }) => {
     setMessage('');

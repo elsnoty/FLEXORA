@@ -1,10 +1,10 @@
 'use server'
-import { Profile } from "@/Types/userAavatar";
+import { ProfileAvatarH } from "@/Types/userAavatar";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function UserAvatarServer(): Promise<{
     error: string | undefined;
-    profiles: Profile[] | null;
+    profiles: ProfileAvatarH[] | null;
 }> {
     const supabase = await createClient() 
     const{data, error} =

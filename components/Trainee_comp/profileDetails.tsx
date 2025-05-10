@@ -8,6 +8,7 @@ export default function ProfileDetails({ profile }: { profile: Profile }) {
     <p><span className="font-semibold">Weight:</span> {profile.weight || '—'} kg</p>
     <p><span className="font-semibold">Location:</span> {profile.location || '—'}</p>
     <p><span className="font-semibold">Phone:</span> {profile.phone_number || '—'}</p>
+    <p><span className="font-semibold">Gender:</span> {profile.gender}</p>
     </div>
 );
 }

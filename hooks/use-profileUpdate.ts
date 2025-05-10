@@ -1,43 +1,46 @@
-import { updateProfile } from "@/components/Trainee_comp/actions/update-profile";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useToast } from "./use-toast";
-import { ProfileFormValues } from "@/components/Trainee_comp/profileForm";
+import { useState } from 'react';
+import { useUpdateProfile } from '@/utils/ReactQuerySupa';
+import { useToast } from '@/hooks/use-toast';
+import type { ProfileFormValues } from '@/components/Trainee_comp/profileForm';
 
-export const useProfileUpdate = () => {
-  const router = useRouter();
+export function useProfileUpdate() {
+  const updateProfile = useUpdateProfile();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const handleSubmit = async (
-    formData: ProfileFormValues,
-    file: File | null
-  ) => {
-    setIsLoading(true);
-    setError(null);
-
+  const handleSubmit = async (data: ProfileFormValues, file: File | null, userId: string): Promise<boolean> => {
     try {
-      await updateProfile(formData, file);
-      router.refresh();
-      toast({
-        title: "Success",
-        description: "Profile updated successfully!",
+      await updateProfile.mutateAsync({
+        data,
+        file,
+        userId
       });
-      return true; // Indicate success
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Failed to update profile";
-      setError(errorMessage);
+      
       toast({
+        title: "Profile updated",
+        description: "Your profile has been successfully updated.",
+        variant: "default",
+      });
+      
+      // Close the sheet after successful update
+      setIsSheetOpen(false);
+      return true;
+    } catch (error) {
+      console.error(error)
+      toast({
+        title: "Update failed",
+        description: "There was a problem updating your profile.",
         variant: "destructive",
-        title: "Error",
-        description: errorMessage,
       });
-      return false; // Indicate failure
-    } finally {
-      setIsLoading(false);
+      return false;
     }
   };
 
-  return { handleSubmit, isLoading, error };
-};
+  return {
+    handleSubmit,
+    isLoading: updateProfile.isPending,
+    error: updateProfile.error?.message || null,
+    isSheetOpen,
+    setIsSheetOpen
+  };
+}

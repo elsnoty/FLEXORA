@@ -3,7 +3,6 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { ToggleTheme } from "@/utils/toggle-theme";
 import Link from "next/link";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { ProfileAvatarH } from "@/Types/userAavatar";
 

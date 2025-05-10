@@ -48,6 +48,7 @@ import { useToast } from "@/hooks/use-toast";
         onConfirm(croppedFile);
         handleClose();
         } catch (err) {
+            console.error(err);
         toast({
             variant: "destructive",
             title: "Error",

@@ -8,7 +8,6 @@ import {
   CardContent
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 
 export default function TraineePage() {
   const upcomingSession = {
@@ -49,7 +48,7 @@ export default function TraineePage() {
       <Card>
         <CardHeader>
           <CardTitle>Upcoming Session</CardTitle>
-          <CardDescription>Don't miss your next workout</CardDescription>
+          <CardDescription>Don&apos;t miss your next workout</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="text-sm space-y-1">
@@ -121,7 +120,7 @@ export default function TraineePage() {
       {/* Optional: Today’s Schedule */}
       <Card>
         <CardHeader>
-          <CardTitle>Today's Schedule</CardTitle>
+          <CardTitle>Today&apos;s Schedule</CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="space-y-2 text-sm">

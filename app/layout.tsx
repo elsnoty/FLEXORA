@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "@/lib/React_queryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +22,9 @@ export default function RootLayout({
         <ThemeProvider
             attribute={"class"} enableSystem
           >
-            {children}
+            <Providers>
+              {children}
+            </Providers>
           </ThemeProvider>
         <Toaster />
       </body>

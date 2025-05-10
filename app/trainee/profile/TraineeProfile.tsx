@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { useProfileUpdate } from "@/hooks/use-profileUpdate";
 import AvatarUpload from "@/components/Trainee_comp/AvatarUploader";
 import ProfileForm from "@/components/Trainee_comp/profileForm";
 import ProfileHeader from "@/components/Trainee_comp/profileHeader";
@@ -11,18 +10,21 @@ import ProfileDetails from "@/components/Trainee_comp/profileDetails";
 import dynamic from 'next/dynamic';
 import { Profile } from "@/Types/profiles";
 import type { ProfileFormValues } from "@/components/Trainee_comp/profileForm";
+import { useUpdateProfile } from "@/utils/ReactQuerySupa";
+import { useProfileUpdate } from "@/hooks/use-profileUpdate";
 
 const CropModal = dynamic(() => import('@/components/Trainee_comp/cropModal'), { ssr: false });
 
 export default function TraineeProfile({ profile }: { profile: Profile }) {
   const [file, setFile] = useState<File | null>(null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
-  const { handleSubmit, isLoading, error } = useProfileUpdate();
+  const { handleSubmit, isLoading, error, isSheetOpen, setIsSheetOpen } = useProfileUpdate();
+  const updateProfile = useUpdateProfile();
 
   const defaultValues: ProfileFormValues = {
     name: profile.name,
     bio: profile.bio || '',
-    height: profile.height|| null,
+    height: profile.height || null,
     weight: profile.weight || null,
     location: profile.location || '',
     phone_number: profile.phone_number || ''
@@ -37,7 +39,7 @@ export default function TraineeProfile({ profile }: { profile: Profile }) {
   };
 
   const handleFormSubmit = async (data: ProfileFormValues): Promise<void> => {
-    await handleSubmit(data, file);
+    await handleSubmit(data, file, profile.user_id);
   };
 
   return (
@@ -45,12 +47,12 @@ export default function TraineeProfile({ profile }: { profile: Profile }) {
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Your Profile</CardTitle>
-          <CardDescription>Here's your personal information</CardDescription>
+          <CardDescription>Here&apos;s your personal information</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <ProfileHeader profile={profile} />
           <ProfileDetails profile={profile} />
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button className="mt-4">Update Profile</Button>
             </SheetTrigger>
@@ -66,13 +68,13 @@ export default function TraineeProfile({ profile }: { profile: Profile }) {
                   file={file}
                   profile={profile}
                   handleFileChange={handleFileChange}
-                  isLoading={isLoading}
+                  isLoading={updateProfile.isPending}
                 />
                 <ProfileForm
                   defaultValues={defaultValues}
                   handleSubmit={handleFormSubmit}
-                  isLoading={isLoading}
-                  error={error}
+                  isLoading={updateProfile.isPending}
+                  error={updateProfile.error?.message || null}
                   file={file}
                 />
               </div>

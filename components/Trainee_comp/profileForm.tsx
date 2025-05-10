@@ -13,7 +13,6 @@ export default function ProfileForm({
   handleSubmit,
   isLoading,
   error,
-  file,
 }: {
   defaultValues: ProfileFormValues;
   handleSubmit: (data: ProfileFormValues) => Promise<void>;
