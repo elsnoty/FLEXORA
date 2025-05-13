@@ -3,23 +3,20 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import AvatarUpload from "@/components/Trainee_comp/AvatarUploader";
-import ProfileForm from "@/components/Trainee_comp/profileForm";
-import ProfileHeader from "@/components/Trainee_comp/profileHeader";
-import ProfileDetails from "@/components/Trainee_comp/profileDetails";
 import dynamic from 'next/dynamic';
 import { Profile } from "@/Types/profiles";
-import type { ProfileFormValues } from "@/components/Trainee_comp/profileForm";
-import { useUpdateProfile } from "@/utils/ReactQuerySupa";
 import { useProfileUpdate } from "@/hooks/use-profileUpdate";
+import AvatarUpload from "./AvatarUploader";
+import ProfileForm, { ProfileFormValues } from "./profileForm";
+import ProfileHeader from "./profileHeader";
+import ProfileDetails from "./profileDetails";
 
-const CropModal = dynamic(() => import('@/components/Trainee_comp/cropModal'), { ssr: false });
+const CropModal = dynamic(() => import('@/components/shared/cropModal'), { ssr: false });
 
-export default function TraineeProfile({ profile }: { profile: Profile }) {
+export default function ProfileLayout({ profile }: { profile: Profile }) {
   const [file, setFile] = useState<File | null>(null);
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const { handleSubmit, isLoading, error, isSheetOpen, setIsSheetOpen } = useProfileUpdate();
-  const updateProfile = useUpdateProfile();
 
   const defaultValues: ProfileFormValues = {
     name: profile.name,
@@ -35,11 +32,13 @@ export default function TraineeProfile({ profile }: { profile: Profile }) {
     if (selectedFile) {
       setFile(selectedFile);
       setIsCropModalOpen(true);
+      setIsSheetOpen(true);
     }
   };
 
   const handleFormSubmit = async (data: ProfileFormValues): Promise<void> => {
-    await handleSubmit(data, file, profile.user_id);
+    await handleSubmit(data, file);
+    setIsSheetOpen(false);
   };
 
   return (
@@ -68,13 +67,13 @@ export default function TraineeProfile({ profile }: { profile: Profile }) {
                   file={file}
                   profile={profile}
                   handleFileChange={handleFileChange}
-                  isLoading={updateProfile.isPending}
+                  isLoading={isLoading}
                 />
                 <ProfileForm
                   defaultValues={defaultValues}
                   handleSubmit={handleFormSubmit}
-                  isLoading={updateProfile.isPending}
-                  error={updateProfile.error?.message || null}
+                  isLoading={isLoading}
+                  error={error}
                   file={file}
                 />
               </div>

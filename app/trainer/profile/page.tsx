@@ -22,5 +22,7 @@ export default async function Page() {
     return <div className="text-center mt-10 text-red-500">Profile not found.</div>;
   }
   
-  return <ProfileLayout profile={{...profile, email:user.email}} />;
+  return(
+    <ProfileLayout profile={{...profile, email:user.email}} />
+  )
 }

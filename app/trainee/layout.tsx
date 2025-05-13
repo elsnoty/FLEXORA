@@ -1,4 +1,4 @@
-import HeaderTrainee from '@/components/Trainee_comp/headerTrainee';
+import HeaderTrainee from '@/components/shared/headerTrainee';
 import SidebarTrainee from '@/components/Trainee_comp/SideBar';
 import UserAvatarServer from '@/components/userAvatar';
 

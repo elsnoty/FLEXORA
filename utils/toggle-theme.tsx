@@ -13,7 +13,6 @@ export function ToggleTheme() {
   }, []);
 
   if (!mounted) return null;
-  console.log("Current theme:", theme);
   return (
     <div>
       {theme === "light" ? (
