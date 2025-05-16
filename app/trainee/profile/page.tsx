@@ -1,3 +1,4 @@
+//trainee profile 
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { createClient } from "@/utils/supabase/server";
 

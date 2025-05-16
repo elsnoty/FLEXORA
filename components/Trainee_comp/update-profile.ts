@@ -2,12 +2,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
-import { ProfileSchema } from "@/utils/validation/ProfileSchema";
-import { ProfileFormValues } from "../shared/profileForm";
+import { ProfileSchema, TrainerProfileSchema } from "@/utils/validation/ProfileSchema";
+import { CombinedFormValues, ProfileFormValues } from "../shared/profileForm";
+import { updateTrainer } from "../Traniner_Comp/update-trainer";
 
 export async function updateProfile(
-  rawFormData: ProfileFormValues,
-  file: File | null
+  rawFormData: CombinedFormValues,
+  file: File | null,
+  role: 'trainer' | 'trainee'
 ) {
   const supabase = await createClient();
 
@@ -24,13 +26,13 @@ export async function updateProfile(
 
   if (file) {
     const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    const maxSize = 2 * 1024 * 1024;
+    const maxSize = 700 * 1024; 
 
     if (!validTypes.includes(file.type)) {
       throw new Error('Only JPEG, PNG, or WebP images allowed');
     }
     if (file.size > maxSize) {
-      throw new Error('Image must be smaller than 2MB');
+      throw new Error('Image must be smaller than 700KB');
     }
 
     const { data: oldFiles } = await supabase.storage
@@ -74,12 +76,42 @@ export async function updateProfile(
     updated_at: new Date().toISOString()
   };
 
-  const { error } = await supabase
+  const { error: profileError } = await supabase
     .from("profiles")
     .update(updates)
     .eq("user_id", user.id);
 
-  if (error) throw new Error(`Profile update failed: ${error.message}`);
+    if (role === 'trainer') {
+    // Validate trainer data first
+    const resutTrainer = TrainerProfileSchema.safeParse(rawFormData)
+
+    if (!resutTrainer.success) {
+        throw new Error(resutTrainer.error.errors[0].message);
+    }
+
+    const trainerData = resutTrainer.data
+    
+  const { data: existingTrainer, error: fetchError } = await supabase
+        .from('trainers')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .single();
+
+    if (fetchError && !existingTrainer) {
+        // If no record exists, create one
+        const { error: insertError } = await supabase
+            .from('trainers')
+            .insert({
+                user_id: user.id,
+                ...trainerData
+            });
+        
+        if (insertError) throw new Error(`Trainer creation failed: ${insertError.message}`);
+    } else {
+        await updateTrainer(trainerData);
+    }
+}
+  if (profileError) throw new Error(`Profile update failed: ${profileError.message}`);
 
   revalidatePath("/dashboard/trainee/profile");
 }

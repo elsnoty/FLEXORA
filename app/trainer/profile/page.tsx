@@ -1,28 +1,42 @@
+// trainer profile page
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { createClient } from "@/utils/supabase/server";
 
 export default async function Page() {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
     return <div className="text-center mt-10 text-red-500">You must be logged in.</div>;
   }
 
-  const { data: profile, error } = await supabase
+  // Fetch profile and trainer data in a single query
+  const { data, error } = await supabase
     .from("profiles")
-    .select("id, user_id, name, avatar_url, bio, height, weight, location, phone_number, gender")
+    .select(`
+      *,
+      trainers (
+        specialization,
+        hourly_rate,
+        is_active
+      )
+    `)
     .eq("user_id", user.id)
     .single();
 
-  if (error || !profile) {
+  if (error || !data) {
     return <div className="text-center mt-10 text-red-500">Profile not found.</div>;
   }
-  
-  return(
-    <ProfileLayout profile={{...profile, email:user.email}} />
-  )
+
+  // Combine the data into a single profile object
+  const profile = {
+    ...data,
+    ...data.trainers?.[0], // Spread trainer data if it exists
+    email: user.email
+  };
+
+  return (
+    <ProfileLayout profile={profile} />
+  );
 }

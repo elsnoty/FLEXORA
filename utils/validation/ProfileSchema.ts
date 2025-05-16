@@ -24,3 +24,9 @@ export const ProfileSchema = z.object({
     .optional()
     .nullable()
 });
+
+export const TrainerProfileSchema = z.object({
+    specialization: z.string().min(2, "Specialization must be at least 2 characters"),
+    hourly_rate: z.number().min(0, "Hourly rate must be positive"),
+    is_active: z.boolean().default(true)
+});

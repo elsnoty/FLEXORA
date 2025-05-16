@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import dynamic from 'next/dynamic';
-import { Profile } from "@/Types/profiles";
+import { Profile, TrainerProfile } from "@/Types/profiles";
 import { useProfileUpdate } from "@/hooks/use-profileUpdate";
 import AvatarUpload from "./AvatarUploader";
-import ProfileForm, { ProfileFormValues } from "./profileForm";
 import ProfileHeader from "./profileHeader";
 import ProfileDetails from "./profileDetails";
+import ProfileForm, { CombinedFormValues } from "./profileForm";
 
 const CropModal = dynamic(() => import('@/components/shared/cropModal'), { ssr: false });
 
@@ -18,13 +18,16 @@ export default function ProfileLayout({ profile }: { profile: Profile }) {
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const { handleSubmit, isLoading, error, isSheetOpen, setIsSheetOpen } = useProfileUpdate();
 
-  const defaultValues: ProfileFormValues = {
+  const defaultValues: CombinedFormValues = {
     name: profile.name,
     bio: profile.bio || '',
     height: profile.height || null,
     weight: profile.weight || null,
     location: profile.location || '',
-    phone_number: profile.phone_number || ''
+    phone_number: profile.phone_number || '',
+    specialization: profile.specialization,
+    hourly_rate: profile.hourly_rate,
+    is_active: profile.is_active
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,8 +39,8 @@ export default function ProfileLayout({ profile }: { profile: Profile }) {
     }
   };
 
-  const handleFormSubmit = async (data: ProfileFormValues): Promise<void> => {
-    await handleSubmit(data, file);
+  const handleFormSubmit = async (data: CombinedFormValues): Promise<void> => {
+    await handleSubmit(data, file, profile.role);
     setIsSheetOpen(false);
   };
 
@@ -75,6 +78,7 @@ export default function ProfileLayout({ profile }: { profile: Profile }) {
                   isLoading={isLoading}
                   error={error}
                   file={file}
+                  role={profile.role}
                 />
               </div>
             </SheetContent>

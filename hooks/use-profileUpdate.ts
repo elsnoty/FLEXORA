@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "./use-toast";
 import { updateProfile } from "@/components/Trainee_comp/update-profile";
-import { ProfileFormValues } from "@/components/shared/profileForm";
+import { CombinedFormValues } from "@/components/shared/profileForm";
 
 export const useProfileUpdate = () => {
   const router = useRouter();
@@ -12,14 +12,15 @@ export const useProfileUpdate = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleSubmit = async (
-    formData: ProfileFormValues,
-    file: File | null
+    formData: CombinedFormValues,
+    file: File | null,
+    role: "trainer" | "trainee"
   ) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      await updateProfile(formData, file);
+      await updateProfile(formData, file, role);
       router.refresh();
       toast({
         title: "Success",

@@ -1,4 +1,4 @@
-export interface Profile {
+export interface Profile extends TrainerProfile{
     id: number;
     user_id: string;
     name: string;
@@ -10,4 +10,11 @@ export interface Profile {
     phone_number?: string | null;
     email?: string;
     gender: string;
+    role: 'trainer' | 'trainee';
+}
+
+export interface TrainerProfile{
+    specialization: string;
+    hourly_rate: number;
+    is_active: boolean;
 }

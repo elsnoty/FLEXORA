@@ -6,6 +6,7 @@ import {
   SheetTrigger,
   SheetHeader,
   SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import {
   Dumbbell,
@@ -52,6 +53,7 @@ export default function SidebarTrainee() {
                 <div>
                 <SheetHeader>
                 <SheetTitle>Trainee Dashboard</SheetTitle>
+                <SheetDescription></SheetDescription>
                 </SheetHeader>
                 <nav className="flex flex-col gap-4 mt-6">
                 {links.map((link) => (

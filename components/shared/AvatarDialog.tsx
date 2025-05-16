@@ -4,6 +4,7 @@ import {
   DialogTrigger,
   DialogContent,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Profile } from "@/Types/profiles";
@@ -20,6 +21,9 @@ export default function AvatarDialog({ profile }: { profile: Profile }) {
       </DialogTrigger>
       <DialogContent className="max-w-sm space-y-4">
         <DialogTitle>Preview</DialogTitle>
+        <DialogDescription>
+          Adjust the image to fit your avatar.
+        </DialogDescription>
         <div className="w-full aspect-square relative rounded-full overflow-hidden">
           {profile.avatar_url ? (
             <Image
@@ -27,6 +31,7 @@ export default function AvatarDialog({ profile }: { profile: Profile }) {
               alt="User avatar preview"
               fill
               className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
             <Avatar className="w-full h-full">
