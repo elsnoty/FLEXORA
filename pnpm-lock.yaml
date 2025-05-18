@@ -47,9 +47,6 @@ importers:
       '@supabase/ssr':
         specifier: ^0.5.2
         version: 0.5.2(@supabase/supabase-js@2.49.1)
-      '@supabase/supabase-js':
-        specifier: ^2.47.16
-        version: 2.49.1
       '@tanstack/react-query':
         specifier: ^5.75.7
         version: 5.75.7(react@19.0.0)

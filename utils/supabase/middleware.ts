@@ -6,7 +6,8 @@ export async function updateSession(request: NextRequest) {
 
   // Allow Supabase OAuth callback to pass through
   if (request.nextUrl.pathname.startsWith("/auth/callback") ||
-  request.nextUrl.pathname.startsWith("/api/logout")) {
+  request.nextUrl.pathname.startsWith("/api/logout") ||
+  request.nextUrl.pathname.startsWith("/api/trainers/search")) {
     return response;
   }
 

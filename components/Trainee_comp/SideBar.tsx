@@ -19,6 +19,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import SearchTraineeBar from "./SearchTraineeBar";
 
 const links = [
     { href: "/trainee/profile", label: "Profile", icon: <User className="h-5 w-5" /> },
@@ -55,6 +56,7 @@ export default function SidebarTrainee() {
                 <SheetTitle>Trainee Dashboard</SheetTitle>
                 <SheetDescription></SheetDescription>
                 </SheetHeader>
+                <SearchTraineeBar />
                 <nav className="flex flex-col gap-4 mt-6">
                 {links.map((link) => (
                     <Link
@@ -88,6 +90,7 @@ export default function SidebarTrainee() {
         {/* Top Navigation Links */}
         <nav className="flex flex-col gap-4">
         <h1>Trainee Dashboard</h1>
+          <SearchTraineeBar />
         {links.map((link) => (
             <Link
             key={link.href}

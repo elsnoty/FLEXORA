@@ -18,3 +18,13 @@ export interface TrainerProfile{
     hourly_rate: number;
     is_active: boolean;
 }
+
+export interface Trainer {
+    user_id: string;
+    specialization: string;
+    hourly_rate: number;
+    profiles: {
+      name: string;
+      avatar_url: string | null;
+    };
+  }
