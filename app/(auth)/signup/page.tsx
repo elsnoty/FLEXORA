@@ -46,14 +46,6 @@ export default function Signup() {
     if (result?.error) {
       setError(result.error)
       setIsSubmitting(false)
-    } else if (result?.success) {
-      form.reset()
-      toast({
-        title: "Check your email 📬",
-        description: result.success,
-        duration: 3500,
-      })
-      setIsSubmitting(false)
     }
   }
 

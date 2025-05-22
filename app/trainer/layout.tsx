@@ -1,15 +1,15 @@
 import HeaderTrainee from '@/components/shared/headerTrainee';
-import SidebarTrainee from '@/components/Trainee_comp/TraineeSideBar';
-import { GetTraineeSideLinks } from '@/components/Trainee_comp/TraineeSideLinks';
+import TrainerSideBar from '@/components/Trainer_comp/TrainerSideBar';
+import { GetTrainerSideLinks } from '@/components/Trainer_comp/TrainerSideBarLinks';
 import UserAvatarServer from '@/components/userAvatar';
 
-export default async function TraineeLayout({
+export default async function TrainerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { profiles, error } = await UserAvatarServer();
-  const ownProfile = profiles?.find(profile => profile.role === 'trainee') || null;
+  const ownProfile = profiles?.find(profile =>profile.role === 'trainer') || null;
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -18,13 +18,13 @@ export default async function TraineeLayout({
   if (!ownProfile) {
     return <div>No profile found</div>;
   }
-  const links = await GetTraineeSideLinks();
+  const links = await GetTrainerSideLinks();
 
   return (
     <div className="min-h-screen flex flex-col">
       <HeaderTrainee ownProfile={ownProfile} />
       <div className="flex flex-1">
-        <SidebarTrainee links={links} />
+        <TrainerSideBar links={links} />
         <main className="flex-1 p-4 ml-0 md:ml-64 mt-[72px] overflow-auto">
           {children}
         </main>

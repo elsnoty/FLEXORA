@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { randomUUID } from "crypto";
 import { ProfileSchema, TrainerProfileSchema } from "@/utils/validation/ProfileSchema";
 import { CombinedFormValues, ProfileFormValues } from "../shared/profileForm";
-import { updateTrainer } from "../Traniner_Comp/update-trainer";
+import { updateTrainer } from "../Trainer_comp/update-trainer";
 
 export async function updateProfile(
   rawFormData: CombinedFormValues,

@@ -7,8 +7,12 @@ export default async function UserAvatarServer(): Promise<{
     profiles: ProfileAvatarH[] | null;
 }> {
     const supabase = await createClient() 
+    const {
+        data: { user },
+      } = await supabase.auth.getUser();
+    
     const{data, error} =
-    await supabase.from('profiles').select('id, avatar_url, name')
+    await supabase.from('profiles').select('id, avatar_url, name, role').eq('user_id', user?.id)
 
     return{
         error: error?.message,

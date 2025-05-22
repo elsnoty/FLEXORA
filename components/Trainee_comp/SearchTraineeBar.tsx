@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/Spinner";
 import { Trainer } from "@/Types/profiles";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function SearchTraineeBar({ asChild = false }: { asChild?: boolean }) {
   const [open, setOpen] = useState(false);
@@ -15,7 +15,6 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -96,7 +95,9 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
             </div>
           ) : trainers.length > 0 ? (
             trainers.map((trainer) => (
-              <TrainerCard key={trainer.user_id} trainer={trainer} />
+              <Link href={`/trainee/suggestion/${trainer.user_id}`} key={trainer.user_id} onClick={() => setOpen(false)}>
+                <TrainerCard trainer={trainer} />
+              </Link>
             ))
           ) : searchQuery ? (
             <div className="text-center py-4 text-muted-foreground">
@@ -114,11 +115,6 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
 }
 
 function TrainerCard({ trainer }: { trainer: Trainer }) {
-  const router = useRouter();
-
-  const handleViewProfile = () => {
-    router.push(`/trainee/${trainer.user_id}`);
-  };
 
   return (
     <div className="flex items-center gap-4 p-3 border rounded-lg hover:bg-accent transition-colors">
@@ -137,9 +133,7 @@ function TrainerCard({ trainer }: { trainer: Trainer }) {
       <Button 
         size="sm" 
         variant="outline" 
-        className="shrink-0"
-        onClick={handleViewProfile}
-      >
+        className="shrink-0">
         View
       </Button>
     </div>

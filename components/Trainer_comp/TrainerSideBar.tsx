@@ -9,29 +9,22 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import {
-  Dumbbell,
   LogOut,
-  MessageSquare,
-  Settings,
-  User,
   Menu,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import SearchTraineeBar from "./SearchTraineeBar";
+import {useState } from "react";
+import { SidebarLink } from "@/Types/SideBarLinks";
 
-const links = [
-    { href: "/trainee/profile", label: "Profile", icon: <User className="h-5 w-5" /> },
-    { href: "/trainee/workouts", label: "Workouts", icon: <Dumbbell className="h-5 w-5" /> },
-    { href: "/trainee/messages", label: "Messages", icon: <MessageSquare className="h-5 w-5" /> },
-    { href: "/trainee/settings", label: "Settings", icon: <Settings className="h-5 w-5" /> },
-];
+interface SidebarTraineeProps {
+    links: SidebarLink[];
+  }
 
-export default function SidebarTrainee() {
+export default function SidebarTrainee({ links }: SidebarTraineeProps) {
     const [open, setOpen] = useState(false);
     const router = useRouter();
-
+  
     const handleLogout = async () => {
       const res = await fetch("/api/logout", { method: "POST" });
       if (res.ok) {
@@ -40,6 +33,21 @@ export default function SidebarTrainee() {
         router.push("/error");
       }
     };
+    const renderLinks = () => (
+        <>
+            {links.map((link) => (
+                <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-3 text-sm font-medium hover:text-primary"
+                >
+                    {link.icon}
+                    {link.label}
+                </Link>
+            ))}
+        </>
+    );
     return (
         <>
         {/* Mobile Toggle */}
@@ -53,22 +61,11 @@ export default function SidebarTrainee() {
             <SheetContent side="left" className="w-64 flex flex-col justify-between">
                 <div>
                 <SheetHeader>
-                <SheetTitle>Trainee Dashboard</SheetTitle>
+                <SheetTitle>Trainer Dashboard</SheetTitle>
                 <SheetDescription></SheetDescription>
                 </SheetHeader>
-                <SearchTraineeBar />
                 <nav className="flex flex-col gap-4 mt-6">
-                {links.map((link) => (
-                    <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 text-sm font-medium hover:text-primary"
-                    >
-                    {link.icon}
-                    {link.label}
-                    </Link>
-                ))}
+                {renderLinks()}
                 </nav>
                 </div>
 
@@ -89,18 +86,8 @@ export default function SidebarTrainee() {
     <div className="flex flex-col justify-between h-full p-4">
         {/* Top Navigation Links */}
         <nav className="flex flex-col gap-4">
-        <h1>Trainee Dashboard</h1>
-          <SearchTraineeBar />
-        {links.map((link) => (
-            <Link
-            key={link.href}
-            href={link.href}
-            className="flex items-center gap-3 text-sm font-medium hover:text-primary"
-            >
-            {link.icon}
-            {link.label}
-            </Link>
-        ))}
+        <h1 className="text-2xl font-bold">Trainer Dashboard</h1>
+          {renderLinks()}
         </nav>
 
         {/* Bottom Logout */}
