@@ -1,7 +1,9 @@
-'/profile/suggestion/[id]'
 import { createClient } from "@/utils/supabase/server";
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
+import { getProgramsForCurrentTrainer } from "@/utils/supabase/program-queries";
+import { ProgramCard } from "@/components/Programs/ProgramsPreview";
+export const dynamic = 'force-dynamic'; // for always fresh data
 
 export default async function TrainerProfilePageView({
   params,
@@ -9,8 +11,12 @@ export default async function TrainerProfilePageView({
   params: { id: string };
 }) {
   const supabase = await createClient();
+  const trainerId = params.id;
 
-  // Fetch profile and trainer data in a single query
+  // Fetch trainer's programs
+  const programs = await getProgramsForCurrentTrainer(trainerId);
+
+  // Fetch trainer profile and extra details
   const { data, error } = await supabase
     .from("profiles")
     .select(`
@@ -21,22 +27,35 @@ export default async function TrainerProfilePageView({
         is_active
       )
     `)
-    .eq("user_id", params.id)
+    .eq("user_id", trainerId)
     .single();
 
   if (error || !data || !data.trainers?.[0]) {
     notFound();
   }
 
-  // Combine the data into a single profile object
   const profile = {
     ...data,
-    ...data.trainers[0], 
+    ...data.trainers[0],
   };
 
   return (
-    <div className="">
+    <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-10">
       <ProfileLayout profile={profile} isEditable={false} />
+
+      <section className="space-y-4">
+        <h2 className="text-2xl font-semibold">Training Programs</h2>
+
+        {programs.length === 0 ? (
+          <div className="text-gray-500 italic">This trainer hasn't added any programs yet.</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {programs.map((program) => (
+              <ProgramCard key={program.id} program={program} isTrainer={true} />
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   );
-} 
+}

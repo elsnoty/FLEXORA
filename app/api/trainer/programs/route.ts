@@ -92,7 +92,7 @@ export async function GET(request: Request) {
     }
 
     // Get the trainer's programs
-    const { data: programs, error: programsError } = await supabase
+    const { data: programs, error: programsError, } = await supabase
       .from("training_programs")
       .select(`
         *,

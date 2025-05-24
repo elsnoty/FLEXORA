@@ -38,6 +38,7 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
         if (!response.ok) throw new Error(response.statusText);
         
         const data = await response.json();
+        console.log(data);
         if (!Array.isArray(data)) throw new Error('Invalid data format');
         
         setTrainers(data);
@@ -52,7 +53,8 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
         }
       }
     };
-
+    //debounce the search to avoid too many requests if we type jhon without debounce we will have 4 requests it 
+    // 'jhon' 'jo' 'joh' 'joh' but with debounce we will have 1 request 'jhon'
     const debounceTimer = setTimeout(searchTrainers, 300);
     
     return () => {
