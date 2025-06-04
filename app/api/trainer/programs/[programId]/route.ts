@@ -1,7 +1,6 @@
+// trainer/programs/[programId]/route.ts
 import { NextResponse } from "next/server";
-import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
-import { moduleSchema } from "@/utils/validation/Programschemas";
 
 // app/api/trainer/programs/[programId]/route.ts
 export async function GET(

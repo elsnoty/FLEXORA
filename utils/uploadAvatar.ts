@@ -1,5 +1,5 @@
-import { AppError } from '../AppError';
-import { createClient } from './server';
+import { AppError } from './AppError';
+import { createClient } from './supabase/server';
 import { randomUUID } from 'crypto';
 
     export async function uploadAvatar(userId: string, file: File) {

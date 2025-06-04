@@ -1,15 +1,15 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProgramDetailsForm } from "../../../components/Programs/ProgramDetailsForm";
-import { ModuleForm } from "../../../components/Programs/ModuleForm";
-import { ContentForm } from "../../../components/Programs/ContentForm";
+import { ProgramDetailsForm } from "./ProgramDetailsForm";
+import { ModuleForm } from "./ModuleForm";
+import { ContentForm} from "./ContentForm";
 import { programSchema, moduleSchema, contentSchema, type ProgramFormValues, type ModuleFormValues,
- type ContentFormValues } from "../../../utils/validation/Programschemas";
-import { programApi } from "@/lib/axiosProgram";
+type ContentFormValues } from "../../utils/validation/Programschemas";
 import { useToast } from "@/hooks/use-toast";
+import { createContent, createModules, createProgram } from "@/app/actions/programs";
+
 interface CreateProgramFormProps {
   onSuccess?: () => void;
 }
@@ -52,8 +52,8 @@ export function CreateProgramForm({ onSuccess }: CreateProgramFormProps) {
   const onProgramSubmit = async (data: ProgramFormValues) => {
     try {
       setIsSubmitting(true);
-      const { data: result } = await programApi.create(data);
-      setProgramId(result.id);
+      const program = await createProgram(data);
+      setProgramId(program.id);
       setCurrentStep(2);
       toast({
         title: "Success",
@@ -72,10 +72,10 @@ export function CreateProgramForm({ onSuccess }: CreateProgramFormProps) {
     
     try {
       setIsSubmitting(true);
-      const { data: result } = await programApi.createModules(programId, data);
-      setModuleIds(result.moduleIds);
+      const { moduleIds } = await createModules(programId, data);
+      setModuleIds(moduleIds);
       contentForm.reset({
-        moduleContents: result.moduleIds.map((moduleId: string) => ({
+        moduleContents: moduleIds.map((moduleId: string) => ({
           module_id: moduleId,
           content_type: "video",
           content_url: "",
@@ -102,7 +102,7 @@ export function CreateProgramForm({ onSuccess }: CreateProgramFormProps) {
     
     try {
       setIsSubmitting(true);
-      await programApi.createContent(programId, data);
+      await createContent(data);
       toast({
         title: "Success",
         description: "Program created successfully!",

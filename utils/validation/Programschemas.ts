@@ -26,7 +26,7 @@ export const contentSchema = z.object({
   moduleContents: z.array(z.object({
     module_id: z.string(),
     content_type: z.enum(["video", "document", "meal_plan", "workout"]),
-    content_url: z.string().url("Must be a valid URL"),
+    content_url: z.string().optional(),
     title: z.string().min(3, "Title must be at least 3 characters"),
     description: z.string().optional().default(""),
     duration_minutes: z.coerce.number().optional().nullable(),
@@ -35,4 +35,4 @@ export const contentSchema = z.object({
 
 export type ProgramFormValues = z.infer<typeof programSchema>;
 export type ModuleFormValues = z.infer<typeof moduleSchema>;
-export type ContentFormValues = z.infer<typeof contentSchema>; 
+export type ContentFormValues = z.infer<typeof contentSchema>;

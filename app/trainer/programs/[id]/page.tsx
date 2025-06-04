@@ -1,15 +1,27 @@
+//trainer/programs/[id]/page.tsx
 import { notFound } from "next/navigation";
 import ProgramDetails from "@/components/Programs/ProgramDetailsView";
-import { getFullProgramPreview } from "@/utils/supabase/program-queries";
-export const dynamic = 'force-dynamic'; // for always fresh data
+import { createClient } from "@/utils/supabase/server";
 
-export default async function ProgramPageDetails({params}: {params: {id: string}}) {
-  const { id } = await params;
-  try {
-    const program = await getFullProgramPreview(id);
-    return <ProgramDetails program={program} />;
-  } catch (error) {
-    console.error("Error fetching program:", error);
-    notFound();
-  }
+export default async function ProgramPageDetails( {params} : { params: Promise<{ id: string }> }) {
+  const supabase = await createClient();
+  const {id} = await params  
+
+  const { data: program, error } = await supabase
+    .from('training_programs')
+    .select(`
+      *,
+      program_modules (
+        *,
+        module_content (
+          *
+        )
+      )
+    `)
+    .eq('id', id)
+    .single();
+
+  if (error || !program) notFound();
+
+  return <ProgramDetails program={program} isTraineeView={false}/>;
 }

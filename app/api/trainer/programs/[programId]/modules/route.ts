@@ -15,10 +15,13 @@ export async function POST(
     const body = await request.json();
     const validatedData = moduleSchema.parse(body);
 
+    // Get the programId from params (no need to await in this case)
+    const { programId } = await params;
+
     // Prepare modules with program_id
     const modulesToInsert = validatedData.modules.map(module => ({
       ...module,
-      program_id: params.programId
+      program_id: programId // Use the destructured value
     }));
 
     // Insert modules

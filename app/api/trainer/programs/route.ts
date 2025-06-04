@@ -1,3 +1,4 @@
+// trainer/programs/route.ts
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/utils/supabase/server";
@@ -73,61 +74,3 @@ export async function POST(request: Request) {
     );
   }
 }
-
-export async function GET(request: Request) {
-  try {
-    const supabase = await createClient();
-    
-    // Get the current user
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    // Get the trainer's programs
-    const { data: programs, error: programsError, } = await supabase
-      .from("training_programs")
-      .select(`
-        *,
-        program_modules (
-          id,
-          title,
-          description,
-          order_index,
-          module_content (
-            id,
-            content_type,
-            content_url,
-            title,
-            description,
-            duration_minutes
-          )
-        )
-      `)
-      .eq("trainer_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (programsError) {
-      console.error("Error fetching programs:", programsError);
-      return NextResponse.json(
-        { error: "Failed to fetch programs" },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(programs);
-  } catch (error) {
-    console.error("Error in fetching programs:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
-  }
-} 

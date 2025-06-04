@@ -1,17 +1,19 @@
+//trainee/suggestion/[id]/page.tsx
 import { createClient } from "@/utils/supabase/server";
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
-import { getProgramsForCurrentTrainer } from "@/utils/supabase/program-queries";
-import { ProgramCard } from "@/components/Programs/ProgramsPreview";
-export const dynamic = 'force-dynamic'; // for always fresh data
+import { getProgramsForCurrentTrainer } from "@/lib/data/programsFetch";
+import { ProgramCard } from "@/components/Programs/ProgramsList";
+export const dynamic = 'force-dynamic'; // for fresh data
 
 export default async function TrainerProfilePageView({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const supabase = await createClient();
-  const trainerId = params.id;
+  const {id} = await params
+  const trainerId = id;
 
   // Fetch trainer's programs
   const programs = await getProgramsForCurrentTrainer(trainerId);
@@ -51,7 +53,7 @@ export default async function TrainerProfilePageView({
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map((program) => (
-              <ProgramCard key={program.id} program={program} isTrainer={true} />
+              <ProgramCard key={program.id} program={program} isTrainee={true} />
             ))}
           </div>
         )}

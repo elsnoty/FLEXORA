@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "./use-toast";
-import { updateProfile } from "@/components/Trainee_comp/update-profile";
+import { updateProfile } from "@/components/shared/update-profile";
 import { CombinedFormValues } from "@/components/shared/profileForm";
 
 export const useProfileUpdate = () => {
