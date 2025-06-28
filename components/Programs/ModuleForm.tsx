@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ModuleFormValues } from "../../utils/validation/Programschemas";
 import { Trash2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ModuleFormProps {
   form: UseFormReturn<ModuleFormValues>;
   onSubmit: (data: ModuleFormValues) => Promise<void>;
   isSubmitting: boolean;
+  mode?: 'create' | 'edit';
 }
 
-export function ModuleForm({ form, onSubmit, isSubmitting }: ModuleFormProps) {
+export function ModuleForm({ form, onSubmit, isSubmitting, mode }: ModuleFormProps) {
   const modules = form.watch("modules");
 
   return (
@@ -43,6 +45,7 @@ export function ModuleForm({ form, onSubmit, isSubmitting }: ModuleFormProps) {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Module Fields */}
               <FormField
                 control={form.control}
                 name={`modules.${index}.title`}
@@ -60,6 +63,7 @@ export function ModuleForm({ form, onSubmit, isSubmitting }: ModuleFormProps) {
                   </FormItem>
                 )}
               />
+              
               <FormField
                 control={form.control}
                 name={`modules.${index}.description`}
@@ -78,6 +82,104 @@ export function ModuleForm({ form, onSubmit, isSubmitting }: ModuleFormProps) {
                   </FormItem>
                 )}
               />
+
+              {/* Content Fields */}
+              <FormField
+                control={form.control}
+                name={`modules.${index}.content_type`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select content type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="video">Video</SelectItem>
+                        <SelectItem value="document">Document</SelectItem>
+                        <SelectItem value="meal_plan">Meal Plan</SelectItem>
+                        <SelectItem value="workout">Workout</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`modules.${index}.content_title`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content Title</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter content title"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`modules.${index}.content_description`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content Description</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter content description"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`modules.${index}.content_url`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content URL</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter content URL"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`modules.${index}.duration_minutes`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duration (minutes)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        min={0}
+                        placeholder="Enter duration in minutes"
+                        {...field}
+                        value={field.value ?? ""}
+                        onChange={(e) => field.onChange(e.target.value ? Number(e.target.value) : null)}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name={`modules.${index}.order_index`}
@@ -95,7 +197,16 @@ export function ModuleForm({ form, onSubmit, isSubmitting }: ModuleFormProps) {
             onClick={() => {
               form.setValue("modules", [
                 ...modules,
-                { title: "", description: "", order_index: modules.length }
+                { 
+                  title: "", 
+                  description: "", 
+                  order_index: modules.length,
+                  content_type: "video",
+                  content_title: "",
+                  content_description: "",
+                  content_url: "",
+                  duration_minutes: null
+                }
               ]);
             }}
           >
@@ -106,7 +217,7 @@ export function ModuleForm({ form, onSubmit, isSubmitting }: ModuleFormProps) {
             className="flex-1" 
             disabled={isSubmitting || modules.some(m => !m.title)}
           >
-            {isSubmitting ? "Creating..." : "Next: Add Content"}
+            {isSubmitting ? "Saving..." : mode === "create" ? "Complete Program" : "Update Program"}
           </Button>
         </div>
       </form>

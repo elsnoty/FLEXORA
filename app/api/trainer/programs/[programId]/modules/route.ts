@@ -26,7 +26,7 @@ export async function POST(
 
     // Insert modules
     const { data, error } = await supabase
-      .from("program_modules")
+      .from("program_modules_v2")
       .insert(modulesToInsert)
       .select("id");
 

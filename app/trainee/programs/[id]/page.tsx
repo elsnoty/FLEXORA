@@ -14,13 +14,17 @@ export default async function TraineeProgramPage({
     .from('training_programs')
     .select(`
       *,
-      program_modules (
-        *,
-        module_content (
-          *
-        )
-      ),
-      profiles!inner(*)
+      program_modules_v2 (
+        id,
+        title,
+        description,
+        order_index,
+        content_type,
+        content_url,
+        content_title,
+        content_description,
+        duration_minutes
+      )
     `)
     .eq('id', id)
     .single();

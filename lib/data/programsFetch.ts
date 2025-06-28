@@ -6,20 +6,17 @@ import { createClient } from "@/utils/supabase/server";
     .from('training_programs')
     .select(
       `*,
-        program_modules (
-          id,
-          title,
-          description,
-          order_index,
-          module_content (
-            id,
-            content_type,
-            content_url,
-            title,
-            description,
-            duration_minutes
-          )
-        )`
+        program_modules_v2 (
+        id,
+        title,
+        description,
+        order_index,
+        content_type,
+        content_url,
+        content_title,
+        content_description,
+        duration_minutes
+      )`
     )
     .eq('trainer_id', trainerId)
     .eq('is_public', true) 

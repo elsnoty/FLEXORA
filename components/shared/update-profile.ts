@@ -82,5 +82,5 @@ export async function updateProfile(
 
   if (profileError) throw new Error(`Profile update failed: ${profileError.message}`);
 
-  revalidatePath("/dashboard/trainee/profile");
+  revalidatePath(`/dashboard/${role}/profile`);
 }

@@ -1,14 +1,9 @@
-// app/actions/programs.ts
 'use server';
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { 
-  ProgramFormValues,
-  ModuleFormValues,
-  ContentFormValues
-} from '@/utils/validation/Programschemas';
+import { ProgramFormValues, ModuleFormValues } from '@/utils/validation/Programschemas';
+import { Program } from '@/Types/programsType';
 
-// Create Program
 export async function createProgram(data: ProgramFormValues) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -25,37 +20,23 @@ export async function createProgram(data: ProgramFormValues) {
   return program;
 }
 
-// Create Modules
 export async function createModules(programId: string, data: ModuleFormValues) {
   const supabase = await createClient();
   
-  const modulesToInsert = data.modules.map(module => ({
+  const modulesToInsert = data.modules.map(({id,...module}) => ({
     ...module,
     program_id: programId
   }));
 
   const { data: modules, error } = await supabase
-    .from('program_modules')
+    .from('program_modules_v2')
     .insert(modulesToInsert)
-    .select('id');
+    .select('*');
 
   if (error) throw error;
-  return { moduleIds: modules.map(m => m.id) };
+  return { modules };
 }
 
-// Create Content
-export async function createContent(data: ContentFormValues) {
-  const supabase = await createClient();
-  const { error } = await supabase
-    .from('module_content')
-    .insert(data.moduleContents);
-
-  if (error) throw error;
-  revalidatePath('/trainer/programs');
-  return { success: true };
-}
-
-// Delete Program 
 export async function deleteProgram(programId: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -69,4 +50,85 @@ export async function deleteProgram(programId: string) {
 
   if (error) throw error;
   revalidatePath('/trainer/programs');
+}
+
+export async function updateProgram(programId: string, updates: Partial<Program>) {
+  const supabase = await createClient();
+  
+  const { error: updateError } = await supabase
+    .from("training_programs")
+    .update(updates)
+    .eq("id", programId);
+
+  if (updateError) throw updateError;
+
+  const { data, error: fetchError } = await supabase
+    .from("training_programs")
+    .select(`
+      *,
+      program_modules_v2 (
+        id,
+        title,
+        description,
+        order_index,
+        content_type,
+        content_url,
+        content_title,
+        content_description,
+        duration_minutes
+      )
+    `)
+    .eq("id", programId)
+    .single();
+
+  if (fetchError) throw fetchError;
+  revalidatePath('/trainer/programs');
+  return data;
+}
+
+export async function updateModules(programId: string, data: ModuleFormValues) {
+  const supabase = await createClient();
+  
+  // First delete all existing modules for this program
+  await supabase
+    .from('program_modules_v2')
+    .delete()
+    .eq('program_id', programId);
+
+  // Insert the updated modules
+  const modulesToInsert = data.modules.map(module => ({
+    ...module,
+    program_id: programId
+  }));
+
+  const { data: insertedModules, error: insertError } = await supabase
+    .from('program_modules_v2')
+    .insert(modulesToInsert)
+    .select('*');
+
+  if (insertError) throw insertError;
+
+  // Fetch the complete program data after update
+  const { data: updatedProgram, error: fetchError } = await supabase
+    .from("training_programs")
+    .select(`
+      *,
+      program_modules_v2 (
+        id,
+        title,
+        description,
+        order_index,
+        content_type,
+        content_url,
+        content_title,
+        content_description,
+        duration_minutes
+      )
+    `)
+    .eq("id", programId)
+    .single();
+
+  if (fetchError) throw fetchError;
+  revalidatePath('/trainer/programs');
+  return updatedProgram;
 }

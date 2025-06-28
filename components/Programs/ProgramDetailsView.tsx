@@ -2,27 +2,25 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Calendar, BarChart, Users, DollarSign} from "lucide-react";
-import { Program, ProgramCategory, BaseModule } from "@/Types/programsType";
+import { Program, ProgramCategory } from "@/Types/programsType";
 import { useRouter } from "next/navigation";
-import { Accordion} from "@/components/ui/accordion";
+import { Accordion } from "@/components/ui/accordion";
 import { deleteProgram } from "@/app/actions/programs";
 import { useToast } from "@/hooks/use-toast";
 import { ProgramHeader, DetailCard, ProgramModule } from "./prgramDetailsSUbs";
-
-type ProgramWithModules = Program & {
-  program_modules: BaseModule[];
-};
+import { EditProgramDialog } from "./EditProgramDialog";
+import { DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose, Drawer } from "../ui/drawer";
 
 export default function ProgramDetails({
   program,
   isTraineeView = false
 }: {
-  program: ProgramWithModules;
+  program: Program;
   isTraineeView?: boolean;
 }) {
   const router = useRouter();
   const { toast } = useToast();
-
+  
   const handleDelete = async () => {
     try {
       await deleteProgram(program.id);
@@ -45,7 +43,6 @@ export default function ProgramDetails({
 
   return (
     <div className="container mx-auto py-8">
-      {/* Header Actions */}
       <div className="flex justify-between mb-6">
         <Button variant="ghost" onClick={() => router.back()}>
           <ArrowLeft className="w-4 h-4 mr-2" />
@@ -53,9 +50,24 @@ export default function ProgramDetails({
         </Button>
         
         {!isTraineeView ? (
-          <Button variant="destructive" onClick={handleDelete}>
-            Delete Program
-          </Button>
+          <div className="flex gap-2 flex-wrap">
+          <EditProgramDialog program={program} />
+            <Drawer>
+              <DrawerTrigger className="bg-red-600 p-2 rounded-md">Delete Program</DrawerTrigger>
+              <DrawerContent>
+                <DrawerHeader>
+                  <DrawerTitle>Are you absolutely sure?</DrawerTitle>
+                  <DrawerDescription>This action cannot be undone.</DrawerDescription>
+                </DrawerHeader>
+                <DrawerFooter>
+                  <Button onClick={handleDelete}>Submit</Button>
+                  <DrawerClose asChild>
+                    <Button variant="destructive">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          </div>
         ) : (
           <Button>Purchase Program ($ {program.price})</Button>
         )}
@@ -68,7 +80,6 @@ export default function ProgramDetails({
           coverImageUrl={program.cover_image_url ?? ''}
         />
 
-        {/* Program Details */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           <DetailCard 
             icon={Calendar} 
@@ -92,15 +103,14 @@ export default function ProgramDetails({
           />
         </div>
 
-        {/* Program Modules */}
         <Card>
           <CardHeader>
             <CardTitle>Program Modules</CardTitle>
           </CardHeader>
           <CardContent>
-            {program.program_modules?.length > 0 ? (
+            {program.program_modules_v2?.length > 0 ? (
               <Accordion type="single" collapsible className="w-full">
-                {program.program_modules.map((module) => (
+                {program.program_modules_v2.map((module) => (
                   <ProgramModule key={module.id} module={module} />
                 ))}
               </Accordion>

@@ -1,7 +1,7 @@
 import * as z from "zod";
 
-// Step 1: Basic Program Schema
 export const programSchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(3, "Name must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   duration_weeks: z.coerce.number().min(1, "Duration must be at least 1 week"),
@@ -12,27 +12,19 @@ export const programSchema = z.object({
   cover_image_url: z.string().optional(),
 });
 
-// Step 2: Module Schema
 export const moduleSchema = z.object({
   modules: z.array(z.object({
+    id: z.string().optional(),
     title: z.string().min(3, "Title must be at least 3 characters"),
     description: z.string().optional(),
     order_index: z.number(),
-  }))
-});
-
-// Step 3: Content Schema
-export const contentSchema = z.object({
-  moduleContents: z.array(z.object({
-    module_id: z.string(),
-    content_type: z.enum(["video", "document", "meal_plan", "workout"]),
+    content_type: z.enum(["video", "document", "meal_plan", "workout"]).optional(),
     content_url: z.string().optional(),
-    title: z.string().min(3, "Title must be at least 3 characters"),
-    description: z.string().optional().default(""),
+    content_title: z.string().optional(),
+    content_description: z.string().optional(),
     duration_minutes: z.coerce.number().optional().nullable(),
   }))
 });
 
 export type ProgramFormValues = z.infer<typeof programSchema>;
 export type ModuleFormValues = z.infer<typeof moduleSchema>;
-export type ContentFormValues = z.infer<typeof contentSchema>;

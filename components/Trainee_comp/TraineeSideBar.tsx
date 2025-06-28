@@ -55,7 +55,7 @@ export default function SidebarTrainee({ links }: SidebarTraineeProps) {
         <div className="md:hidden absolute top-4 left-4 z-50">
             <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-                <button className="p-2">
+                <button className="p-2 fixed top-4 left-4">
                 <Menu className="h-6 w-6" />
                 </button>
             </SheetTrigger>

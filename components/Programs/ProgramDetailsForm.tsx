@@ -1,19 +1,30 @@
 "use client";
 import { UseFormReturn } from "react-hook-form";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { ImageUpload } from "@/components/Programs/ImageUpload";
 import { ProgramFormValues } from "../../utils/validation/Programschemas";
-
+import { Switch } from "../ui/switch";
+import { Textarea } from "../ui/textarea"; 
+import { ImageUpload } from "./CoverImageProgram";
 interface ProgramDetailsFormProps {
   form: UseFormReturn<ProgramFormValues>;
   onSubmit: (data: ProgramFormValues) => Promise<void>;
   isSubmitting: boolean;
+  mode?: "create" | "edit";
 }
 
-export function ProgramDetailsForm({ form, onSubmit, isSubmitting }: ProgramDetailsFormProps) {
+export function ProgramDetailsForm({
+  form,
+  onSubmit,
+  isSubmitting,
+  mode = "create",
+}: ProgramDetailsFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -38,7 +49,7 @@ export function ProgramDetailsForm({ form, onSubmit, isSubmitting }: ProgramDeta
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Input
+                <Textarea
                   placeholder="Describe your training program"
                   className="min-h-[100px]"
                   {...field}
@@ -103,46 +114,67 @@ export function ProgramDetailsForm({ form, onSubmit, isSubmitting }: ProgramDeta
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="cover_image_url"
             render={() => (
               <FormItem>
                 <ImageUpload onUpload={(url) => {
-                  form.setValue('cover_image_url', url);
+                  form.setValue("cover_image_url", url);
                 }} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="difficulty"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Difficulty Level</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select difficulty" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="beginner">Beginner</SelectItem>
-                    <SelectItem value="intermediate">Intermediate</SelectItem>
-                    <SelectItem value="advanced">Advanced</SelectItem>
-                  </SelectContent>
-                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
 
+        <FormField
+          control={form.control}
+          name="difficulty"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Difficulty Level</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select difficulty" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="beginner">Beginner</SelectItem>
+                  <SelectItem value="intermediate">Intermediate</SelectItem>
+                  <SelectItem value="advanced">Advanced</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="is_public"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+              <div className="space-y-0.5">
+                <FormLabel>Is Public</FormLabel>
+              </div>
+              <FormControl>
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Creating..." : "Next: Add Modules"}
+          {isSubmitting
+            ? "Submitting..."
+            : mode === "create"
+              ? "Next: Add Modules"
+              : "Update Program"}
         </Button>
       </form>
     </Form>
   );
-} 
+}

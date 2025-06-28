@@ -14,12 +14,17 @@ export async function GET(
       .from('training_programs')
       .select(`
         *,
-        program_modules (
-          *,
-          module_content (
-            *
-          )
-        )
+        program_modules_v2 (
+        id,
+        title,
+        description,
+        order_index,
+        content_type,
+        content_url,
+        content_title,
+        content_description,
+        duration_minutes
+      )
       `)
       .eq('id', params.programId)
       .single();
@@ -30,7 +35,7 @@ export async function GET(
     // Sort modules by order_index
     const sortedProgram = {
       ...program,
-      program_modules: program.program_modules?.sort((a: any, b: any) => a.order_index - b.order_index) || []
+      program_modules_v2: program.program_modules_v2?.sort((a: any, b: any) => a.order_index - b.order_index) || []
     };
 
     return NextResponse.json(sortedProgram);
