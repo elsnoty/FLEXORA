@@ -1,7 +1,7 @@
 import HeaderTrainee from '@/components/shared/headerTrainee';
 import TrainerSideBar from '@/components/Trainer_comp/TrainerSideBar';
 import { GetTrainerSideLinks } from '@/components/Trainer_comp/TrainerSideBarLinks';
-import UserAvatarServer from '@/components/userAvatar';
+import UserAvatarServer from '@/app/actions/userAvatar';
 
 export default async function TrainerLayout({
   children,

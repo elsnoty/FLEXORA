@@ -8,7 +8,8 @@ export async function updateSession(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/auth/callback") ||
   request.nextUrl.pathname.startsWith("/api/logout") || 
   request.nextUrl.pathname.startsWith("/api/trainers/search") ||
-  request.nextUrl.pathname.startsWith("/api/trainer/programs")) {
+  request.nextUrl.pathname.startsWith("/api/trainer/programs") || 
+  request.nextUrl.pathname.startsWith("/api/sessions")) {
     return response;
   }
 

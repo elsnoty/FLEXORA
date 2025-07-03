@@ -4,6 +4,7 @@ import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
 import { getProgramsForCurrentTrainer } from "@/lib/data/programsFetch";
 import { ProgramCard } from "@/components/Programs/ProgramsList";
+import BookSessionDialog from "@/components/sessions/BookSessionDialog";
 export const dynamic = 'force-dynamic'; // for fresh data
 
 export default async function TrainerProfilePageView({
@@ -40,11 +41,11 @@ export default async function TrainerProfilePageView({
     ...data,
     ...data.trainers[0],
   };
-
   return (
     <div className="p-4 md:p-8 max-w-6xl mx-auto space-y-10">
       <ProfileLayout profile={profile} isEditable={false} />
-
+      <BookSessionDialog trainerId={trainerId}/>
+      
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Training Programs</h2>
 

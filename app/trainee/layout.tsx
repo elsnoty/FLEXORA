@@ -1,7 +1,7 @@
 import HeaderTrainee from '@/components/shared/headerTrainee';
 import SidebarTrainee from '@/components/Trainee_comp/TraineeSideBar';
 import { GetTraineeSideLinks } from '@/components/Trainee_comp/TraineeSideLinks';
-import UserAvatarServer from '@/components/userAvatar';
+import UserAvatarServer from '@/app/actions/userAvatar';
 
 export default async function TraineeLayout({
   children,

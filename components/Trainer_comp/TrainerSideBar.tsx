@@ -69,14 +69,13 @@ export default function SidebarTrainee({ links }: SidebarTraineeProps) {
                 </nav>
                 </div>
 
-                <Link
-                    href="/auth/logout"
-                    onClick={() => setOpen(false)}
+                <button
+                    onClick={handleLogout}
                     className="flex items-center gap-3 text-sm font-medium text-red-500 mt-4"
                 >
                     <LogOut className="h-5 w-5" />
                     Logout
-                </Link>
+                </button>
             </SheetContent>
             </Sheet>
         </div>
