@@ -5,8 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 
 export default async function ProgramPageDetails({ params }:  {params: Promise<{ id: string }>}) {
   const supabase = await createClient();
-  const { id } = await params; // Remove the await here
-
+  const { id } = await params; 
   const { data: program, error } = await supabase
     .from('training_programs')
     .select(`

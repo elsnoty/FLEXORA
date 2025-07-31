@@ -6,14 +6,14 @@ export async function POST(req: Request) {
   const payload = await req.json();
 
   // Verify the webhook (optional: validate Paymob HMAC signature)
-  if (payload.obf.success === true) {
+  if (payload.obj.success === true) {
     const { error } = await supabase
       .from("sessions")
       .update({ 
         payment_status: "paid",
         payment_id: payload.obj.order.id 
       })
-      .eq("id", payload.obj.order.merchant_order_id); // Match session ID
+      .eq("id", payload.obj.order.merchant_order_id); 
 
     if (error) {
       console.error("Supabase update error:", error);
