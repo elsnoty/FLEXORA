@@ -2,7 +2,7 @@
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { createClient } from "@/utils/supabase/server";
 
-export default async function Page({params}:{params: {id: string}}) {
+export default async function Page() {
   const supabase = await createClient();
 
   const { data: { user } } = await supabase.auth.getUser();
@@ -10,7 +10,6 @@ export default async function Page({params}:{params: {id: string}}) {
   if (!user) {
     return <div className="text-center mt-10 text-red-500">You must be logged in.</div>;
   }
-  params.id = user.id;
   // Fetch profile and trainer data in a single query
   const { data, error } = await supabase
     .from("profiles")
@@ -22,7 +21,7 @@ export default async function Page({params}:{params: {id: string}}) {
         is_active
       )
     `)
-    .eq("user_id", params.id)
+    .eq("user_id", user.id)
     .single();
 
   if (error || !data) {

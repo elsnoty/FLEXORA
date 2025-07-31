@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Dumbbell, Calendar, BarChart, Plus } from "lucide-react";
+import { Dumbbell, Calendar, BarChart } from "lucide-react";
 import { Program } from "@/Types/programsType";
 import Link from "next/link";
 import {CreateProgramDialog} from "./CreateProgramDialog";

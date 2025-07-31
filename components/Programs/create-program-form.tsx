@@ -7,6 +7,7 @@ import { createModules, createProgram } from "@/app/actions/programs";
 import { useProgramForms } from "@/hooks/useProgramForms";
 import { ProgramFormValues, ModuleFormValues } from "@/utils/validation/Programschemas";
 import { useRouter } from "next/navigation";
+import { handleError } from "@/utils/errorHandling";
 
 interface CreateProgramFormProps {
   onSuccess?: () => void;
@@ -30,7 +31,10 @@ export function CreateProgramForm({ onSuccess }: CreateProgramFormProps) {
       setCurrentStep(2);
       toast({ title: "Success", description: "Program created! Now add modules." });
     } catch (error) {
-      toast({ title: "Error", description: "Failed to create program", variant: "destructive" });
+      toast({ 
+        title: "Error",
+        description: handleError(error, "Failed to create program"),
+        variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
@@ -46,7 +50,10 @@ export function CreateProgramForm({ onSuccess }: CreateProgramFormProps) {
       onSuccess?.();
       router.refresh(); 
     } catch (error) {
-      toast({ title: "Error", description: "Failed to create modules", variant: "destructive" });
+      toast({ 
+        title: "Error",
+        description: handleError(error, "Failed to create Modules"),
+        variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }

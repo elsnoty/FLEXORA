@@ -2,11 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
 
-export default async function TraineeProfilePageView({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function TraineeProfilePageView() {
   const supabase = await createClient();
 const {
     data: { user },
@@ -15,14 +11,13 @@ const {
   if (!user) {
     return <div className="text-center mt-10 text-red-500">You must be logged in.</div>;
   }
-  params.id = user.id;
   // Fetch profile and trainer data in a single query
   const { data, error } = await supabase
     .from("profiles")
     .select(`
       *
     `)
-    .eq("user_id", params.id)
+    .eq("user_id", user.id)
     .single();
 
   if (error || !data) {

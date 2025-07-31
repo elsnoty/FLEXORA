@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     );
     }
 
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const { data: { user }} = await supabase.auth.getUser();
 
     if (!user) {
     return NextResponse.json(

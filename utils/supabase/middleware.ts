@@ -9,7 +9,10 @@ export async function updateSession(request: NextRequest) {
   request.nextUrl.pathname.startsWith("/api/logout") || 
   request.nextUrl.pathname.startsWith("/api/trainers/search") ||
   request.nextUrl.pathname.startsWith("/api/trainer/programs") || 
-  request.nextUrl.pathname.startsWith("/api/sessions")) {
+  request.nextUrl.pathname.startsWith("/api/sessions")|| 
+  request.nextUrl.pathname.startsWith("/api/payment")||
+  request.nextUrl.pathname.startsWith("/api/webhook") ||
+  request.nextUrl.pathname.startsWith("/payment/success") ) {
     return response;
   }
 

@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ProgramHeader, DetailCard, ProgramModule } from "./prgramDetailsSUbs";
 import { EditProgramDialog } from "./EditProgramDialog";
 import { DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose, Drawer } from "../ui/drawer";
+import { handleError } from "@/utils/errorHandling";
 
 export default function ProgramDetails({
   program,
@@ -32,7 +33,7 @@ export default function ProgramDetails({
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to delete program",
+        description: handleError(error, "Failed to delete program"),
         variant: "destructive"
       });
     }

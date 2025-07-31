@@ -28,8 +28,11 @@ export async function updateProfile(
     try {
       // Use the uploadAvatar utility
       avatar_url = await uploadAvatar(user.id, file);
-    } catch (error: any) {
-      throw new Error(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
+      throw new Error("Failed to upload avatar");
     }
   }
 

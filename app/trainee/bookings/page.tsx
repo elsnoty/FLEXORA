@@ -3,8 +3,9 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { BookingSessions } from "@/Types/Sessions";
+import { PayButton } from "./PayMobBUTTON";
+import Image from "next/image";
 
 export default async function TraineeBookingsPage() {
   const supabase = await createClient();
@@ -31,9 +32,12 @@ export default async function TraineeBookingsPage() {
             <Card key={session.id}>
               <CardHeader className="flex flex-row items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <img 
+                  <Image
+                  width={30}
+                  height={30} 
+                  alt="/default-avatar.jpg"
                     src={session.trainer_avatar || "/default-avatar.jpg"} 
-                    className="w-10 h-10 rounded-full"
+                    className="rounded-full"
                   />
                   <div>
                     <h3>{session.trainer_name}</h3>
@@ -67,9 +71,7 @@ export default async function TraineeBookingsPage() {
                   )}
                 </div>
                 {session.status === 'accepted' && (
-                  <Button className="mt-4" >
-                    Proceed to Payment
-                  </Button>
+                    <PayButton sessionId={session.id}/>
                 )}
               </CardContent>
             </Card>

@@ -15,7 +15,6 @@ import StarryBackground from "@/components/StaryBg";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import {useShowPassword, useLoadingState} from "@/hooks/ShowPassword";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useToast } from "@/hooks/use-toast";
 
 
 type SignupFormValues = z.infer<typeof AuthSchema>;
@@ -24,7 +23,6 @@ export default function Signup() {
   const {showPassword, setShowPassword} = useShowPassword() 
   const {isSubmitting, setIsSubmitting} = useLoadingState();
   const [error, setError] = useState<string | null>(null);
-  const {toast} = useToast()
   
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(AuthSchema),

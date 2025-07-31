@@ -19,7 +19,7 @@ export function ProgramFormManager({ mode, program, onSuccess }: ProgramFormMana
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState("program");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentProgram, setCurrentProgram] = useState(program);
+  const [ ,setCurrentProgram] = useState(program);
   const [programId, setProgramId] = useState<string | null>(program?.id ?? null);
 
   const { programForm, moduleForm } = useProgramForms(mode, program);

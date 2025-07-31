@@ -1,4 +1,4 @@
-import { User, Dumbbell, MessageSquare, BarChart, BookmarkIcon } from "lucide-react";
+import { User, MessageSquare, BarChart, BookmarkIcon } from "lucide-react";
 import UserAvatarServer from "../../app/actions/userAvatar";
 
 export async function GetTraineeSideLinks() {

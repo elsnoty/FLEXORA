@@ -103,7 +103,7 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
             ))
           ) : searchQuery ? (
             <div className="text-center py-4 text-muted-foreground">
-              No trainers found for "{searchQuery}"
+              No trainers found for &quot;{searchQuery}&quot;
             </div>
           ) : (
             <div className="text-center py-4 text-muted-foreground">

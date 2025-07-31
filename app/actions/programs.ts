@@ -23,7 +23,7 @@ export async function createProgram(data: ProgramFormValues) {
 export async function createModules(programId: string, data: ModuleFormValues) {
   const supabase = await createClient();
   
-  const modulesToInsert = data.modules.map(({id,...module}) => ({
+  const modulesToInsert = data.modules.map(({...module}) => ({
     ...module,
     program_id: programId
   }));
@@ -101,7 +101,7 @@ export async function updateModules(programId: string, data: ModuleFormValues) {
     program_id: programId
   }));
 
-  const { data: insertedModules, error: insertError } = await supabase
+  const { error: insertError } = await supabase
     .from('program_modules_v2')
     .insert(modulesToInsert)
     .select('*');

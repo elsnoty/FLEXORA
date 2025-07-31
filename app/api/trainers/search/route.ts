@@ -1,3 +1,4 @@
+import { Trainer } from '@/Types/TraineeSearch';
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
 
@@ -32,7 +33,7 @@ export async function GET(request: Request) {
     if (error) throw error;
 
     // Filter out any null profiles (if join fails)
-    const filteredData = data?.filter((t: any) => t.profiles !== null) || [];
+    const filteredData = (data as Trainer[])?.filter(t => t.profiles !== null) || [];
     
     return NextResponse.json(filteredData, {
       headers: {

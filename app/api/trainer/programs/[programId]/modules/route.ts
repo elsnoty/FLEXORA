@@ -6,7 +6,7 @@ import { moduleSchema } from "@/utils/validation/Programschemas";
 
 export async function POST(
   request: Request,
-  { params }: { params: { programId: string } }
+  { params }: { params: Promise<{ programId: string }> }
 ) {
   const supabase = await createClient();
   

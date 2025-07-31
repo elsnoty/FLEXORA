@@ -1,6 +1,4 @@
 'use client';
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { ToggleTheme } from "@/utils/toggle-theme";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
