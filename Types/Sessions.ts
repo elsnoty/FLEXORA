@@ -18,4 +18,5 @@ export interface BookingSessions{
     rejection_reason: string;
     trainer_name: string;  
     trainer_avatar: string;
+    payment_status: string;
 }

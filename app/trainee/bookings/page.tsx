@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { BookingSessions } from "@/Types/Sessions";
 import { PayButton } from "./PayMobBUTTON";
 import Image from "next/image";
+import { CalendarDays, Clock, Info } from "lucide-react";
 
 export default async function TraineeBookingsPage() {
   const supabase = await createClient();
@@ -18,60 +19,96 @@ export default async function TraineeBookingsPage() {
     .select(`*`)
     .eq("trainee_id", user.id)
     .order("start_time", { ascending: false });
-  const typedSessions = sessions as BookingSessions[] | null;
+
+    const typedSessions = sessions as BookingSessions[] | null;
 
   return (
-    <div className="max-w-4xl mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold">Your Booking Requests</h1>
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      <h1 className="text-3xl font-bold">Your Booking Requests</h1>
       
-      {typedSessions?.length === 0 ? (
-        <p className="text-muted-foreground">No bookings yet</p>
-      ) : (
-        <div className="space-y-3">
-          {typedSessions?.map((session) => (
-            <Card key={session.id}>
-              <CardHeader className="flex flex-row items-center justify-between">
+      {typedSessions && typedSessions.length === 0 ? (
+          <p className="text-muted-foreground text-lg">You haven&apos;t booked any sessions yet.</p>
+          ) : typedSessions && (
+            <div className="space-y-4">
+              {typedSessions.map((session) => (
+            <Card key={session.id} className="shadow-md rounded-2xl border border-gray-200">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
                 <div className="flex items-center gap-3">
                   <Image
-                  width={30}
-                  height={30} 
-                  alt="/default-avatar.jpg"
-                    src={session.trainer_avatar || "/default-avatar.jpg"} 
-                    className="rounded-full"
+                    width={40}
+                    height={40}
+                    alt="trainer avatar"
+                    src={session.trainer_avatar || "/default-avatar.jpg"}
+                    className="rounded-full border object-cover"
                   />
                   <div>
-                    <h3>{session.trainer_name}</h3>
+                    <h3 className="font-semibold text-base">{session.trainer_name}</h3>
+                    <p className="text-sm text-muted-foreground">Trainer</p>
                   </div>
                 </div>
-                <Badge variant={
-                  session.status === 'accepted' ? 'default' :
-                  session.status === 'rejected' ? 'destructive' : 'outline'
-                }>
-                  {session.status}
-                </Badge>
+                <div className="flex gap-2 flex-wrap justify-end">
+                  <Badge variant={
+                    session.status === 'accepted' ? 'default' :
+                    session.status === 'rejected' ? 'destructive' : 'outline'
+                  }>
+                    {session.status}
+                  </Badge>
+                  {session.payment_status && (
+                    <Badge variant={
+                      session.payment_status === 'paid' ? 'default' :
+                      session.payment_status === 'unpaid' ? 'secondary' : 'outline'
+                    }>
+                      {session.payment_status}
+                    </Badge>
+                  )}
+                </div>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Date</p>
-                    <p>{new Date(session.start_time).toLocaleDateString()}</p>
+
+              <CardContent className="p-4 border-t space-y-3 text-sm">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  <div className="flex items-center gap-2">
+                    <CalendarDays className="w-4 h-4 text-muted-foreground" />
+                    <span>
+                      <span className="text-muted-foreground">Date: </span>
+                      {new Date(session.start_time).toLocaleDateString()}
+                    </span>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground">Time</p>
-                    <p>
-                      {new Date(session.start_time).toLocaleTimeString()} - 
-                      {new Date(session.end_time).toLocaleTimeString()}
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-muted-foreground" />
+                    <span>
+                      {new Date(session.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{" "}
+                      {new Date(session.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
                   </div>
-                  {session.status === 'rejected' && (
-                    <div>
-                      <p className="text-sm text-muted-foreground">Reason</p>
-                      <p>{session.rejection_reason || "Not specified"}</p>
+                  {session.status === "rejected" && (
+                    <div className="flex items-center gap-2">
+                      <Info className="w-4 h-4 text-muted-foreground" />
+                      <span>
+                        <span className="text-muted-foreground">Reason: </span>
+                        {session.rejection_reason || "Not specified"}
+                      </span>
                     </div>
                   )}
                 </div>
+
                 {session.status === 'accepted' && (
-                    <PayButton sessionId={session.id}/>
+                  <div className="mt-4">
+                    {session.payment_status === 'paid' ? (
+                      <div className="border border-blue-200 bg-blue-50 text-blue-900 rounded-xl p-4 shadow-sm">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-semibold">Payment Complete</p>
+                            <p className="text-sm text-muted-foreground">
+                              This session is fully confirmed and paid.
+                            </p>
+                          </div>
+                          <div className="text-blue-600 text-lg font-bold">✔</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <PayButton sessionId={session.id} />
+                    )}
+                  </div>
                 )}
               </CardContent>
             </Card>

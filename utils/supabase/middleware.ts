@@ -13,13 +13,10 @@ export async function updateSession(request: NextRequest) {
     "/api/sessions",
     "/api/payment",
     "/api/webhook",
-    "/trainee/payment/processing",
-    "/trainee/payment/processing/*"
   ];
 
   // Check if this is a public route - if so, return early
   if (publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
-    console.log("Public route accessed:", request.nextUrl.pathname);
     return response;
   }
 
@@ -44,23 +41,17 @@ export async function updateSession(request: NextRequest) {
   // Ensure the user session is updated
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
-  if (userError) {
-    console.log("Auth error, treating as unauthenticated:", userError);
-  }
-
   const authRoutes = ["/login", "/signup", "/resetPassword", "/updatePassword"];
   const isAuthPage = authRoutes.some((route) => request.nextUrl.pathname.startsWith(route));
   const isSelectRolePage = request.nextUrl.pathname.startsWith("/select_role");
 
   if (!user && !isAuthPage) {
-    console.log("No user found, redirecting to login");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (user) {
     // Only try to get profile if user exists and has an ID
     if (!user.id) {
-      console.log("User exists but has no ID, redirecting to login");
       return NextResponse.redirect(new URL("/login", request.url));
     }
 
@@ -70,14 +61,9 @@ export async function updateSession(request: NextRequest) {
       .eq("user_id", user.id)
       .single();
 
-    if (profileError) {
-      console.log("Profile fetch error:", profileError);
-    }
-
     const hasCompleteProfile = profile && profile.name && profile.role && profile.gender && !profileError;
 
     if (!hasCompleteProfile && !isSelectRolePage) {
-      console.log("Incomplete profile, redirecting to select role");
       return NextResponse.redirect(new URL("/select_role", request.url));
     }
 
@@ -87,12 +73,10 @@ export async function updateSession(request: NextRequest) {
       const isAllowedRoute = request.nextUrl.pathname.startsWith(allowedPrefix);
 
       if (isAuthPage || isSelectRolePage) {
-        console.log("User authenticated, redirecting to dashboard");
         return NextResponse.redirect(new URL(allowedPrefix, request.url));
       }
 
       if (!isAllowedRoute) {
-        console.log("User not on allowed route, redirecting to dashboard");
         return NextResponse.redirect(new URL(allowedPrefix, request.url));
       }
 

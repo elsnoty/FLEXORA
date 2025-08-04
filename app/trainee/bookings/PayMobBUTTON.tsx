@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 interface PayButtonProps {
     sessionId: string;
@@ -10,8 +12,11 @@ interface PayButtonProps {
 
     export function PayButton({ sessionId }: PayButtonProps) {
     const router = useRouter();
-        const {toast} = useToast()
+    const { toast } = useToast();
+    const [loading, setLoading] = useState(false);
+
     async function handleProceedToPay() {
+        setLoading(true);
         try {
         const res = await fetch("/api/payment", {
             method: "POST",
@@ -21,22 +26,34 @@ interface PayButtonProps {
             body: JSON.stringify({ sessionId })
         });
 
+        const data = await res.json();
+
         if (!res.ok) {
-            const errorData = await res.text();
-            console.error("Payment error:", errorData);
+            console.error("Payment error:", data);
+
+            if (data.code === "SESSION_ALREADY_PAID") {
+            toast({
+                title: "Session Already Paid",
+                description: "This session has already been paid for. Please check your bookings.",
+                variant: "destructive",
+            });
+            setTimeout(() => {
+                router.push("/trainee/bookings");
+            }, 2000);
+            return;
+            }
+
             toast({
             title: "Payment Error",
-            description: "Failed to initiate payment. Please try again.",
+            description: data.error || "Failed to initiate payment. Please try again.",
             variant: "destructive",
             });
             return;
         }
 
-        const data = await res.json();
         if (data.redirect_url) {
             router.push(data.redirect_url);
         } else {
-            console.error("Missing redirect URL:", data);
             toast({
             title: "Payment Error",
             description: "Payment link not available. Please try again.",
@@ -50,12 +67,24 @@ interface PayButtonProps {
             description: "An unexpected error occurred. Please try again.",
             variant: "destructive",
         });
+        } finally {
+        setLoading(false);
         }
     }
 
     return (
-        <Button className="mt-4" onClick={handleProceedToPay}>
-        Proceed to Payment
-        </Button>
+        <Button
+        onClick={handleProceedToPay}
+        disabled={loading}
+        className="w-full sm:w-auto mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 text-white font-semibold px-6 py-2 rounded-xl transition-all shadow-md"
+        >
+        {loading ? (
+            <span className="flex items-center gap-2">
+            <Loader2 className="animate-spin w-4 h-4" /> Processing...
+            </span>
+        ) : (
+            "Pay Now"
+        )}
+    </Button>
     );
 }
