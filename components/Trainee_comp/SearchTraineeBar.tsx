@@ -65,7 +65,7 @@ export default function SearchTraineeBar({ asChild = false }: { asChild?: boolea
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild={asChild}>
+      <DialogTrigger asChild={asChild} className="w-full">
         <div className="flex items-center gap-2 text-sm text-muted-foreground border w-full p-2 rounded-md cursor-pointer hover:bg-accent transition-colors">
           <Search className="h-4 w-4" />
           Search Trainers

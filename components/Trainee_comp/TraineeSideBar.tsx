@@ -84,7 +84,7 @@ export default function SidebarTrainee({ links }: SidebarTraineeProps) {
         </div>
 
         {/* Desktop Sidebar */}
-        <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:min-h-screen md:pt-4 md:mt-0 fixed top-[0] left-0 z-50 bg-background h-[calc(100vh-72px)]">
+        <aside className="hidden md:flex md:w-64 md:flex-col md:min-h-screen md:pt-4 md:mt-0 fixed top-[0] left-0 z-50 bg-background h-[calc(100vh-72px)]">
     <div className="flex flex-col justify-between h-full p-4">
         {/* Top Navigation Links */}
         <nav className="flex flex-col gap-4">

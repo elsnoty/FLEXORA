@@ -1,6 +1,15 @@
 import { createClient } from "@/utils/supabase/server";
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
+import { getTraineeMetadata } from "@/lib/trainee-metadata";
+
+export async function generateMetadata() {
+  return getTraineeMetadata({
+    title: `Profile`,
+    description: `Fitness progress and achievements`,
+    fallbackTitle: 'Trainee Profile'
+  });
+}
 
 export default async function TraineeProfilePageView() {
   const supabase = await createClient();

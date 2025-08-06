@@ -163,7 +163,7 @@ export default function ProfileForm({
 
       {error && <p className="text-red-500 text-sm">{error}</p>}
 
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" variant={"secondary"} className="w-full" disabled={isLoading}>
         {isLoading ? 'Saving...' : 'Save Changes'}
       </Button>
     </form>

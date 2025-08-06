@@ -7,6 +7,15 @@ import { BookingSessions } from "@/Types/Sessions";
 import { PayButton } from "./PayMobBUTTON";
 import Image from "next/image";
 import { CalendarDays, Clock, Info } from "lucide-react";
+import { getTraineeMetadata } from "@/lib/trainee-metadata";
+
+export async function generateMetadata() {
+  return getTraineeMetadata({
+    title: 'Training Bookings',
+    description: 'Manage your session appointments',
+    fallbackTitle: 'My Bookings'
+  });
+}
 
 export default async function TraineeBookingsPage() {
   const supabase = await createClient();

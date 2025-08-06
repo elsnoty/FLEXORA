@@ -67,7 +67,7 @@ export default function ProfileLayout({
           {isEditable && (
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger asChild>
-                <Button className="mt-4">Update Profile</Button>
+                <Button className="mt-4 ">Update Profile</Button>
               </SheetTrigger>
               <SheetContent side="right" className="overflow-y-auto max-h-screen w-full sm:max-w-md">
                 <SheetHeader>

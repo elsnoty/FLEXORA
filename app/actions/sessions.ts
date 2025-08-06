@@ -18,32 +18,3 @@ export async function updateSessionStatus(
 
     if (error) throw error;
 }
-
-export async function createPaymentIntent(sessionId: string) {
-    const supabase = await createClient();
-    
-    // Get session details
-    const { data: session } = await supabase
-        .from('sessions')
-        .select('*, trainers(hourly_rate)')
-        .eq('id', sessionId)
-        .single();
-
-    if (!session) throw new Error("Session not found");
-
-    // Create payment intent (simplified example)
-    const { data, error } = await supabase
-        .from('payment_intents')
-        .insert({
-        session_id: sessionId,
-        amount: session.trainers.hourly_rate,
-        status: 'pending'
-        })
-        .select()
-        .single();
-
-    if (error) throw error;
-    
-    // In real app, integrate with Stripe here
-    return data.id;
-    }

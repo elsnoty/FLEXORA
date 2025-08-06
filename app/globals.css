@@ -1,108 +1,266 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
-    --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
-    --primary: 220.9 39.3% 11%;
-    --primary-foreground: 210 20% 98%;
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 224 71.4% 4.1%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem
-  ;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
-  .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 216 12.2% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
-  ;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
-}
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+@import 'tailwindcss';
+@plugin 'tailwindcss-animate';
+
+/* =============================================
+    THEME DEFINITIONS
+    All color variables are registered here for Tailwind
+============================================= */
+@theme {
+  /* Core colors */
+  --color-background: oklch(var(--background));
+  --color-foreground: oklch(var(--foreground));
+  --color-card: oklch(var(--card));
+  --color-popover: oklch(var(--popover));
+
+  /* Primary color group - Used for main buttons, CTAs, important actions */
+  --color-primary: oklch(var(--primary));
+  --color-primary-foreground: oklch(var(--primary-foreground));
+
+  /* Secondary color group - Used for secondary buttons, less important elements */
+  --color-secondary: oklch(var(--secondary));
+  --color-secondary-foreground: oklch(var(--secondary-foreground));
+
+  /* Accent color group - Used for highlights, accents */
+  --color-accent: oklch(var(--accent));
+  --color-accent-foreground: oklch(var(--accent-foreground));
+
+  /* Muted color group - Used for subtle backgrounds, inactive states */
+  --color-muted: oklch(var(--muted));
+  --color-muted-foreground: oklch(var(--muted-foreground));
+
+  /* Destructive color group - Used for errors, warnings, destructive actions */
+  --color-destructive: oklch(var(--destructive));
+  --color-destructive-foreground: oklch(var(--destructive-foreground));
+
+  /* Border colors */
+  --color-border: oklch(var(--border));
+  --color-input: oklch(var(--input));
+  --color-ring: oklch(var(--ring));
+
+  /* Chart colors - Used for data visualizations */
+  --color-chart-1: oklch(var(--chart-1));
+  --color-chart-2: oklch(var(--chart-2));
+  --color-chart-3: oklch(var(--chart-3));
+  --color-chart-4: oklch(var(--chart-4));
+  --color-chart-5: oklch(var(--chart-5));
+
+  /* Sidebar colors - Special colors for sidebar/navigation */
+  --color-sidebar: oklch(var(--sidebar));
+  --color-sidebar-foreground: oklch(var(--sidebar-foreground));
+  --color-sidebar-primary: oklch(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: oklch(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: oklch(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: oklch(var(--sidebar-accent-foreground));
+  --color-sidebar-border: oklch(var(--sidebar-border));
+  --color-sidebar-ring: oklch(var(--sidebar-ring));
 }
 
+/* =============================================
+    UTILITY CLASSES
+    All custom utility classes for colors and animations
+============================================= */
+@layer utilities {
+  /* ========== BACKGROUND COLORS ========== */
+  .bg-background { background-color: var(--color-background); } /* Page background */
+  .bg-card { background-color: var(--color-card); } /* Cards, panels, surfaces */
+  .bg-popover { background-color: var(--color-popover); } /* Popovers, dropdowns */
+  
+  /* Primary color backgrounds */
+  .bg-primary { background-color: var(--color-primary); } /* Primary buttons, CTAs */
+  .bg-primary-foreground { background-color: var(--color-primary-foreground); } /* Text on primary */
+
+  /* Secondary color backgrounds */
+  .bg-secondary { background-color: var(--color-secondary); } /* Secondary buttons */
+  .bg-secondary-foreground { background-color: var(--color-secondary-foreground); }
+
+  /* Accent color backgrounds */
+  .bg-accent { background-color: var(--color-accent); } /* Highlights, accents */
+  .bg-accent-foreground { background-color: var(--color-accent-foreground); }
+
+  /* State color backgrounds */
+  .bg-destructive { background-color: var(--color-destructive); } /* Errors, warnings */
+  .bg-destructive-foreground { background-color: var(--color-destructive-foreground); }
+  .bg-muted { background-color: var(--color-muted); } /* Subtle backgrounds */
+
+  /* ========== TEXT COLORS ========== */
+  .text-foreground { color: var(--color-foreground); } /* Primary text color */
+  .text-primary { color: var(--color-primary); } /* Primary brand color text */
+  .text-primary-foreground { color: var(--color-primary-foreground); } /* Text on primary bg */
+  .text-secondary { color: var(--color-secondary); }
+  .text-secondary-foreground { color: var(--color-secondary-foreground); }
+  .text-accent { color: var(--color-accent); }
+  .text-accent-foreground { color: var(--color-accent-foreground); }
+  .text-destructive { color: var(--color-destructive); }
+  .text-destructive-foreground { color: var(--color-destructive-foreground); }
+  .text-muted { color: var(--color-muted-foreground); } /* Secondary text, captions */
+
+  /* ========== BORDER COLORS ========== */
+  .border { border-color: var(--color-border); } /* Default border color */
+  .border-primary { border-color: var(--color-primary); }
+  .border-secondary { border-color: var(--color-secondary); }
+  .border-accent { border-color: var(--color-accent); }
+  .border-destructive { border-color: var(--color-destructive); }
+  .border-muted { border-color: var(--color-muted); }
+
+  /* ========== CHART COLORS ========== */
+  .bg-chart-1 { background-color: var(--color-chart-1); }
+  .bg-chart-2 { background-color: var(--color-chart-2); }
+  .bg-chart-3 { background-color: var(--color-chart-3); }
+  .bg-chart-4 { background-color: var(--color-chart-4); }
+  .bg-chart-5 { background-color: var(--color-chart-5); }
+  .text-chart-1 { color: var(--color-chart-1); }
+  .text-chart-2 { color: var(--color-chart-2); }
+  .text-chart-3 { color: var(--color-chart-3); }
+  .text-chart-4 { color: var(--color-chart-4); }
+  .text-chart-5 { color: var(--color-chart-5); }
+
+  /* ========== SIDEBAR COLORS ========== */
+  .bg-sidebar { background-color: var(--color-sidebar); }
+  .text-sidebar-foreground { color: var(--color-sidebar-foreground); }
+  .bg-sidebar-primary { background-color: var(--color-sidebar-primary); }
+  .text-sidebar-primary-foreground { color: var(--color-sidebar-primary-foreground); }
+
+  /* ========== ANIMATIONS ========== */
+  .animate-accordion-down { animation: accordion-down 0.2s ease-out; }
+  .animate-accordion-up { animation: accordion-up 0.2s ease-out; }
+}
+
+/* =============================================
+    ANIMATION KEYFRAMES
+    For accordion and other animations
+============================================= */
 @keyframes accordion-down {
-  from {
-    height: 0;
-  }
-  to {
-    height: var(--radix-accordion-content-height);
-  }
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
 }
 
 @keyframes accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-  }
-  to {
-    height: 0;
-  }
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
 }
 
-.animate-accordion-down {
-  animation: accordion-down 0.2s ease-out;
+/* =============================================
+    BASE STYLES
+    Element-specific styles
+============================================= */
+button {
+  cursor: pointer;
+  font-family: var(--font-urbanist);
 }
 
-.animate-accordion-up {
-  animation: accordion-up 0.2s ease-out;
+h1{
+  font-family: var(--font-outfit);
+}
+
+p, div{
+  font-family: var(--font-urbanist);
+}
+/* =============================================
+    COLOR VARIABLES - LIGHT MODE
+    Default color scheme
+============================================= */
+:root {
+  --radius: 0.65rem; /* Border radius for all elements */
+
+  /* Core colors */
+  --background: 1 0 0;                 /* Light background */
+  --foreground: 0.141 0.005 285.823;   /* Dark text */
+  --card: 1 0 0;                       /* Card backgrounds */
+  --popover: 1 0 0;                    /* Popover/dropdown backgrounds */
+  
+  /* Primary colors */
+  --primary: 0.606 0.25 292.717;       /* Brand primary color */
+  --primary-foreground: 0.969 0.016 293.756; /* Text on primary */
+  
+  /* Secondary colors */
+  --secondary: 0.967 0.001 286.375;    /* Secondary color */
+  --secondary-foreground: 0.21 0.006 285.885;
+  
+  /* Muted colors */
+  --muted: 0.967 0.001 286.375;        /* Subtle backgrounds */
+  --muted-foreground: 0.552 0.016 285.938; /* Subtle text */
+  
+  /* Accent colors */
+  --accent: 0.967 0.001 286.375;
+  --accent-foreground: 0.21 0.006 285.885;
+  
+  /* Destructive colors */
+  --destructive: 0.577 0.245 27.325;   /* Error color */
+  --destructive-foreground: 0.969 0.015 12.422;
+  
+  /* Borders */
+  --border: 0.92 0.004 286.32;         /* Default border */
+  --input: 0.92 0.004 286.32;          /* Input borders */
+  --ring: 0.606 0.25 292.717;          /* Focus ring */
+  
+  /* Chart colors */
+  --chart-1: 0.646 0.222 41.116;
+  --chart-2: 0.6 0.118 184.704;
+  --chart-3: 0.398 0.07 227.392;
+  --chart-4: 0.828 0.189 84.429;
+  --chart-5: 0.769 0.188 70.08;
+  
+  /* Sidebar colors */
+  --sidebar: 0.985 0 0;
+  --sidebar-foreground: 0.141 0.005 285.823;
+  --sidebar-primary: 0.606 0.25 292.717;
+  --sidebar-primary-foreground: 0.969 0.016 293.756;
+  --sidebar-accent: 0.967 0.001 286.375;
+  --sidebar-accent-foreground: 0.21 0.006 285.885;
+  --sidebar-border: 0.92 0.004 286.32;
+  --sidebar-ring: 0.606 0.25 292.717;
+}
+
+/* =============================================
+    COLOR VARIABLES - DARK MODE
+    Dark color scheme (applies when .dark class is present)
+============================================= */
+.dark {
+  /* Core colors */
+  --background: 0.141 0.005 285.823;   /* Dark background */
+  --foreground: 0.985 0 0;             /* Light text */
+  --card: 0.21 0.006 285.885;          /* Dark card backgrounds */
+  --popover: 0.21 0.006 285.885;       /* Dark popover backgrounds */
+  
+  /* Primary colors */
+  --primary: 0.541 0.281 293.009;      /* Adjusted primary for dark mode */
+  --primary-foreground: 0.969 0.016 293.756;
+  
+  /* Secondary colors */
+  --secondary: 0.274 0.006 286.033;
+  --secondary-foreground: 0.985 0 0;
+  
+  /* Muted colors */
+  --muted: 0.274 0.006 286.033;
+  --muted-foreground: 0.705 0.015 286.067;
+  
+  /* Accent colors */
+  --accent: 0.274 0.006 286.033;
+  --accent-foreground: 0.985 0 0;
+  
+  /* Destructive colors */
+  --destructive: 0.704 0.191 22.216;
+  --destructive-foreground: 0.985 0 0;
+  
+  /* Borders */
+  --border: 1 0 0 / 10%;               /* Semi-transparent borders */
+  --input: 1 0 0 / 15%;                /* Input borders with more opacity */
+  --ring: 0.541 0.281 293.009;         /* Focus ring */
+  
+  /* Chart colors */
+  --chart-1: 0.488 0.243 264.376;
+  --chart-2: 0.696 0.17 162.48;
+  --chart-3: 0.769 0.188 70.08;
+  --chart-4: 0.627 0.265 303.9;
+  --chart-5: 0.645 0.246 16.439;
+  
+  /* Sidebar colors */
+  --sidebar: 0.21 0.006 285.885;
+  --sidebar-foreground: 0.985 0 0;
+  --sidebar-primary: 0.541 0.281 293.009;
+  --sidebar-primary-foreground: 0.969 0.016 293.756;
+  --sidebar-accent: 0.274 0.006 286.033;
+  --sidebar-accent-foreground: 0.985 0 0;
+  --sidebar-border: 1 0 0 / 10%;
+  --sidebar-ring: 0.541 0.281 293.009;
 }

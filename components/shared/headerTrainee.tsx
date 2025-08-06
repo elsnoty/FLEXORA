@@ -10,7 +10,7 @@ interface HeaderTraineeProps {
 
 export default function HeaderTrainee({ ownProfile }: HeaderTraineeProps) {
   return (
-    <header className="fixed top-0 z-30 w-full h-[72px] border-b bg-background px-4 flex items-center justify-end">
+    <header className="fixed top-0 z-30 w-full h-[72px] px-4 flex items-center justify-end bg-background">
       <div className="flex items-center space-x-4">
         <ToggleTheme />
         {ownProfile && (
