@@ -1,6 +1,17 @@
 // trainer profile page
 import ProfileLayout from "@/components/shared/ProfileLayout";
+import { getUserMetadata } from "@/lib/user-metadata";
 import { createClient } from "@/utils/supabase/server";
+
+export async function generateMetadata() {
+  return getUserMetadata({
+    title: ``,
+    description: `Flexora Fitness progress and achievements`,
+    fallbackTitle: 'Trainer Profile',
+    showName: true,
+    role:'trainer'
+  });
+}
 
 export default async function Page() {
   const supabase = await createClient();

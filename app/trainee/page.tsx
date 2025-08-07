@@ -2,16 +2,15 @@ import {
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent
 } from "@/components/ui/card";
-import { getTraineeMetadata } from "@/lib/trainee-metadata";
+import { getUserMetadata } from "@/lib/user-metadata";
 
 export async function generateMetadata() {
-  return getTraineeMetadata({
+  return getUserMetadata({
     title: 'Fitness Dashboard',
     description: 'Your personalized fitness tracking hub',
-    fallbackTitle: 'My Fitness Dashboard'
+    fallbackTitle: 'My Fitness Dashboard',
   });
 }
 

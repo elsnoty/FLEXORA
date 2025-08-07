@@ -5,14 +5,15 @@ import { notFound } from "next/navigation";
 import { getProgramsForCurrentTrainer } from "@/lib/data/programsFetch";
 import { ProgramCard } from "@/components/Programs/ProgramsList";
 import BookSessionDialog from "@/components/sessions/BookSessionDialog";
-import { getTraineeMetadata } from "@/lib/trainee-metadata";
+import { getUserMetadata } from "@/lib/user-metadata";
 import { Metadata } from "next";
 export const dynamic = 'force-dynamic'; // for fresh data
 
 export async function generateMetadata(): Promise<Metadata> {
-  return getTraineeMetadata({
-      title: `Personalized Suggestions | Fitness Platform`,
+  return getUserMetadata({
+      title: `Personalized Suggestions`,
       description: 'Get customized workout and nutrition suggestions based on your goals',
+      role:'trainee'
   });
 }
 

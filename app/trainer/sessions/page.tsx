@@ -1,7 +1,17 @@
 import TrainerSessionView from "@/components/sessions/TrainerSessionView";
+import { getUserMetadata } from "@/lib/user-metadata";
 import { createClient } from "@/utils/supabase/server";
 import { notFound } from "next/navigation";
 
+export async function generateMetadata() {
+    return getUserMetadata({
+        title: 'Training Sessions',
+        description: 'Manage your upcoming training sessions',
+        role: 'trainer',
+        fallbackTitle: 'Coach Portal'
+        });
+    }
+    
 export default async function TrainerSessionsPage() {
 const supabase = await createClient();
 const { data: { user } } = await supabase.auth.getUser();

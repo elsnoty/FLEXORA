@@ -7,13 +7,14 @@ import { BookingSessions } from "@/Types/Sessions";
 import { PayButton } from "./PayMobBUTTON";
 import Image from "next/image";
 import { CalendarDays, Clock, Info } from "lucide-react";
-import { getTraineeMetadata } from "@/lib/trainee-metadata";
+import { getUserMetadata } from "@/lib/user-metadata";
 
 export async function generateMetadata() {
-  return getTraineeMetadata({
+  return getUserMetadata({
     title: 'Training Bookings',
     description: 'Manage your session appointments',
-    fallbackTitle: 'My Bookings'
+    role:'trainee',
+    fallbackTitle: 'My Bookings',
   });
 }
 
