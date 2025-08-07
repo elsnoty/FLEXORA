@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { segment?: string 
     return params.segment ? authMetadata[params.segment] : authMetadata.login;
 }
 
-export default function AuthLayout({ children, params }: AuthLayoutProps) {
+export default function AuthLayout({ children }: AuthLayoutProps) {
     return (
         <html lang="en">
         <body>
