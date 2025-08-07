@@ -12,10 +12,8 @@ export async function generateMetadata({ params }: { params: { segment?: string 
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
     return (
-        <html lang="en">
-        <body>
+        <>
             {children}
-        </body>
-        </html>
+        </>
     );
 }
