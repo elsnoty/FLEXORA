@@ -10,6 +10,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { BillingFormData, billingSchema } from "@/utils/validation/biling";
+import { handleError } from "@/utils/errorHandling";
 
 export function BillingInfoSheet({ userId }: { userId: string }) {
     const [open, setOpen] = useState(false);
@@ -59,7 +60,7 @@ export function BillingInfoSheet({ userId }: { userId: string }) {
         } catch (error) {
         toast({
             title: "Error",
-            description: "Failed to save billing information",
+            description: handleError(error,"Failed to save billing information"),
             variant: "destructive",
         });
         }

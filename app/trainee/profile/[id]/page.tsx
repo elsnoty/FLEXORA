@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
 import { getUserMetadata } from "@/lib/user-metadata";
-import { BillingInfoSheet } from "@/components/Trainee_comp/BilingInfoSheet";
 import BillingInfoCard from "@/components/Trainee_comp/BillingInfoCard";
 
 export async function generateMetadata() {

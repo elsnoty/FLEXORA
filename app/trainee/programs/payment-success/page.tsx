@@ -115,7 +115,7 @@ export default function ProgramPaymentSuccess() {
                 Payment Successful!
             </h1>
             <p className="text-gray-600 text-center mb-4">
-                You now have full access to <span className="font-semibold">"{programTitle}"</span>.
+                You now have full access to <span className="font-semibold">&quot;{programTitle}&quot;</span>.
             </p>
             <p className="text-sm text-gray-500 text-center">
                 Redirecting to your programs...

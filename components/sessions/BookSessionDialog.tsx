@@ -37,7 +37,7 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
     };
 
     checkBooking();
-    }, [trainerId, open]);
+    }, [trainerId, open, router]);
     
     const handleBooking = async () => {
     if (!date || !selectedTime) return;
