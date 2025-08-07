@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import ProfileLayout from "@/components/shared/ProfileLayout";
 import { notFound } from "next/navigation";
 import { getUserMetadata } from "@/lib/user-metadata";
+import { BillingInfoSheet } from "@/components/Trainee_comp/BilingInfoSheet";
+import BillingInfoCard from "@/components/Trainee_comp/BillingInfoCard";
 
 export async function generateMetadata() {
   return getUserMetadata({
@@ -30,6 +32,12 @@ const {
     `)
     .eq("user_id", user.id)
     .single();
+    
+    const { data: billingInfo } = await supabase
+    .from("billing_info")
+    .select("*")
+    .eq("user_id", user.id)
+    .single();
 
   if (error || !data) {
     notFound();
@@ -39,11 +47,13 @@ const {
   const profile = {
     ...data,
     email: user.email,
+    hasBillingInfo: !!billingInfo
   };
 
   return (
     <div className="">
-      <ProfileLayout profile={profile} isEditable={true}/>
+      <ProfileLayout profile={profile} isEditable={true} />
+      <BillingInfoCard userId={user.id} billingInfo={billingInfo} />
     </div>
   );
 } 

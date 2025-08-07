@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 interface PayButtonProps {
     sessionId: string;
@@ -14,11 +15,33 @@ interface PayButtonProps {
     const router = useRouter();
     const { toast } = useToast();
     const [loading, setLoading] = useState(false);
-
+    const supabase = createClient()
     async function handleProceedToPay() {
         setLoading(true);
         try {
-        const res = await fetch("/api/payment", {
+            const { data: { user } } = await supabase.auth.getUser();
+                if (!user) {
+                router.push('/login');
+            return;
+            }
+            //check from billing info
+            const { data: billingInfo, error } = await supabase
+            .from("billing_info")
+            .select("*")
+            .eq("user_id", user?.id)
+            .single();
+
+            if (error || !billingInfo) {
+            toast({
+                title: "Billing Info Required",
+                description: "Please complete your billing information first",
+                variant: "destructive",
+            });
+            router.push(`/trainee/profile/${user.id}`);
+            return;
+            }
+            //access paymob payment route
+        const res = await fetch("/api/payment/session", {
             method: "POST",
             headers: {
             "Content-Type": "application/json"
@@ -76,7 +99,7 @@ interface PayButtonProps {
         <Button
         onClick={handleProceedToPay}
         disabled={loading}
-        className="w-full sm:w-auto mt-4 bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 text-white font-semibold px-6 py-2 rounded-xl transition-all shadow-md"
+        className="w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-purple-600 hover:opacity-90 text-white font-semibold px-6 py-2 rounded-xl transition-all shadow-md"
         >
         {loading ? (
             <span className="flex items-center gap-2">

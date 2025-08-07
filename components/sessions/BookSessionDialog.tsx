@@ -8,6 +8,7 @@ import { Loader2, Calendar as CalendarIcon } from "lucide-react";
 import { BookingSummary } from "./BookingSummary";
 import { DurationPicker } from "./durationPicker";
 import { TimeSlotPicker } from "./TimeSLotPicker";
+import { useRouter } from "next/navigation";
 
 export default function BookSessionPopover({ trainerId }: { trainerId: string }) {
     const [date, setDate] = useState<Date | undefined>(undefined);
@@ -18,6 +19,7 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
     const [loadingCheck, setLoadingCheck] = useState(true);
     const [alreadyBooked, setAlreadyBooked] = useState(false);
     const { toast } = useToast();
+    const router = useRouter()
 
     useEffect(() => {
     const checkBooking = async () => {
@@ -26,6 +28,7 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
         const res = await fetch(`/api/sessions/check?trainerId=${trainerId}`);
         const data = await res.json();
         setAlreadyBooked(data.hasBooked);
+        router.refresh()
     } catch (error) {
         console.error("Failed to check booking status:", error);
     } finally {
@@ -34,7 +37,7 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
     };
 
     checkBooking();
-    }, [trainerId]);
+    }, [trainerId, open]);
     
     const handleBooking = async () => {
     if (!date || !selectedTime) return;
@@ -44,30 +47,35 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
 
     setLoading(true);
     try {
-    const res = await fetch("/api/sessions/TraineeBook", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-        trainerId,
-        date: startTime.toISOString(),
-        durationHours: duration,
-        }),
-    });
+        const res = await fetch("/api/sessions/TraineeBook", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                trainerId,
+                date: startTime.toISOString(),
+                durationHours: duration,
+            }),
+        });
 
-    if (!res.ok) throw new Error("Booking failed");
+        if (!res.ok) throw new Error("Booking failed");
 
-    toast({ title: "Success!", description: `Session booked for ${duration} hour(s)` });
-    setOpen(false);
+        toast({ title: "Success!", description: `Session booked for ${duration} hour(s)` });
+        setOpen(false);
+        setAlreadyBooked(true);
+        setDate(undefined); // Reset date
+        setSelectedTime(undefined); // Reset time
+        setDuration(1); // Reset duration
+        router.refresh(); // Refresh the page data
     } catch (error) {
-    toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Booking failed",
-        variant: "destructive",
-    });
+        toast({
+            title: "Error",
+            description: error instanceof Error ? error.message : "Booking failed",
+            variant: "destructive",
+        });
     } finally {
-    setLoading(false);
+        setLoading(false);
     }
-    };
+};
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

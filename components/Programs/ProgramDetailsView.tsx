@@ -11,6 +11,7 @@ import { ProgramHeader, DetailCard, ProgramModule } from "./prgramDetailsSUbs";
 import { EditProgramDialog } from "./EditProgramDialog";
 import { DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerClose, Drawer } from "../ui/drawer";
 import { handleError } from "@/utils/errorHandling";
+import { ProgramPayButton } from "./PayMobProgramBTN";
 
 export default function ProgramDetails({
   program,
@@ -70,7 +71,7 @@ export default function ProgramDetails({
             </Drawer>
           </div>
         ) : (
-          <Button>Purchase Program ($ {program.price})</Button>
+          <ProgramPayButton programId={program.id}/>
         )}
       </div>
 

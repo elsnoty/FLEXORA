@@ -48,6 +48,19 @@ export async function POST(req: Request) {
 
     if (paymentError) throw paymentError;
 
+    //4- billing info
+    const { data: billing, error: billingError } = await supabase
+    .from("billing_info")
+    .select("first_name, last_name, email, phone_number, country, city")
+    .eq("user_id", actualSession.trainee_id)
+    .single();
+
+    if (billingError || !billing) {
+    return NextResponse.json(
+        { error: "Billing information not found. Please complete your profile first." },
+        { status: 400 }
+    );
+    }
     const paymobResponse = await fetch('https://accept.paymob.com/v1/intention/', {
         method: 'POST',
         headers: {
@@ -61,19 +74,17 @@ export async function POST(req: Request) {
         items: [{
             name: "Training Session",
             amount: Math.round(session.total_amount * 100),
-            description: `Session with ${session.trainer_name} (Payment ID:${payment.id})`,
+            description: `Session with ${session.trainer_name}`,
+            //apply this if you applied the commented area in the webhook
+            // description: `Session with ${session.trainer_name} (Payment ID:${payment.id})`,
         }],
         billing_data: {
-            apartment: "1",
-            first_name: session.trainee_first_name || "Trainee",
-            last_name: session.trainee_last_name || "User",
-            street: "Test Street",
-            building: "123",
-            phone_number: session.trainee_phone || "+201000000000",
-            country: "EGY",
-            email: session.trainee_email || "user@example.com",
-            floor: "2",
-            state: "Giza"
+            first_name: billing.first_name,
+            last_name: billing.last_name,
+            phone_number: billing.phone_number || "+201000000000", 
+            email: billing.email,
+            country: billing.country || "EGY", 
+            city: billing.city || "Cairo",   
         },
         merchant_order_id: payment.id,
         expiration: 3600,

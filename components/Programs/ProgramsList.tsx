@@ -5,6 +5,7 @@ import { Program } from "@/Types/programsType";
 import Link from "next/link";
 import {CreateProgramDialog} from "./CreateProgramDialog";
 import Image from "next/image";
+import { ProgramPayButton } from "./PayMobProgramBTN";
 
 export default function ProgramsList({ programs }: { programs: Program[] }) {
   return (
@@ -96,9 +97,7 @@ export function ProgramCard({ program, isTrainee }: { program: Program, isTraine
               </Button>
             </Link>
             {isTrainee && (
-              <Button size="sm">
-                Buy Program
-              </Button>
+              <ProgramPayButton programId={program.id}/>
             )}
           </div>
         </div>

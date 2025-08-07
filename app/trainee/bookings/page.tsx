@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookingSessions } from "@/Types/Sessions";
-import { PayButton } from "./PayMobBUTTON";
+import { PayButton } from "./PayMobSessionBTN";
 import Image from "next/image";
 import { CalendarDays, Clock, Info } from "lucide-react";
 import { getUserMetadata } from "@/lib/user-metadata";
