@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import {useState } from "react";
 import SearchTraineeBar from "./SearchTraineeBar";
 import { SidebarLink } from "@/Types/SideBarLinks";
-import Logo from "@/Public/Flexora-LogoV3.png"
+import Logo from "@/public/Flexora-LogoV3.png"
 import Image from "next/image";
 import LogoutButtonMenu from "../shared/LogoutButtonMenu";
 interface SidebarTraineeProps {

@@ -53,6 +53,7 @@ export async function POST(request: Request) {
             const body = await request.json();
             userId = body.userId;
         } catch (parseError) {
+            console.error('Invalid JSON:', parseError);
             return NextResponse.json(
                 { error: 'Invalid request data' },
                 { status: 400 }
@@ -108,6 +109,7 @@ export async function POST(request: Request) {
             { status: 200 }
         );
     } catch (error) {
+        console.error('An unexpected error occurred:', error instanceof Error ? error.message : error);
         return NextResponse.json(
             { error: 'An unexpected error occurred' },
             { status: 500 }

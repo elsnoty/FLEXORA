@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {useState } from "react";
 import { SidebarLink } from "@/Types/SideBarLinks";
-import Logo from "@/Public/Flexora-LogoV2.webp"
+import Logo from "@/public/Flexora-LogoV3.png"
 import Image from "next/image";
 import LogoutButtonMenu from "../shared/LogoutButtonMenu";
 
