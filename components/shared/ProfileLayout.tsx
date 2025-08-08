@@ -11,6 +11,7 @@ import ProfileForm, { CombinedFormValues } from "./profileForm";
 import { useState } from "react";
 import dynamic from 'next/dynamic';
 import { useProfileUpdate } from "@/hooks/use-profileUpdate";
+import DeleteProfileButton from "./DeleteProfileButton";
 
 const CropModal = dynamic(() => import('@/components/shared/cropModal'), { ssr: false });
 
@@ -65,6 +66,7 @@ export default function ProfileLayout({
           <ProfileDetails profile={profile} />
           
           {isEditable && (
+            <div className="flex gap-4">
             <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
               <SheetTrigger asChild>
                 <Button className="mt-4 ">Update Profile</Button>
@@ -94,6 +96,8 @@ export default function ProfileLayout({
                 </div>
               </SheetContent>
             </Sheet>
+            <DeleteProfileButton userId={profile.user_id} role={profile.role}/>
+            </div>
           )}
         </CardContent>
       </Card>

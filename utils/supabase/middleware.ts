@@ -4,7 +4,6 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next();
 
-  // Allow these routes to pass through without authentication
   const publicRoutes = [
     "/auth/callback",
     "/api/logout",
@@ -15,12 +14,10 @@ export async function updateSession(request: NextRequest) {
     "/api/webhook",
   ];
 
-  // Check if this is a public route - if so, return early
-  if (publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))) {
+  if (publicRoutes.some((route) => request.nextUrl.pathname.startsWith(route))) {
     return response;
   }
 
-  // Initialize Supabase client only for non-public routes
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -38,7 +35,6 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  // Ensure the user session is updated
   const { data: { user }, error: userError } = await supabase.auth.getUser();
 
   const authRoutes = ["/login", "/signup", "/resetPassword", "/updatePassword"];
@@ -50,9 +46,13 @@ export async function updateSession(request: NextRequest) {
   }
 
   if (user) {
-    // Only try to get profile if user exists and has an ID
     if (!user.id) {
       return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    // Skip profile check for delete-account route
+    if (request.nextUrl.pathname.startsWith("/api/delete-account")) {
+      return response;
     }
 
     const { data: profile, error: profileError } = await supabase
@@ -68,7 +68,6 @@ export async function updateSession(request: NextRequest) {
     }
 
     if (hasCompleteProfile) {
-      // Define the user's allowed dashboard prefix based on their role
       const allowedPrefix = `/${profile.role}`;
       const isAllowedRoute = request.nextUrl.pathname.startsWith(allowedPrefix);
 

@@ -1,4 +1,4 @@
-import { User, MessageSquare, BarChart, BookmarkIcon } from "lucide-react";
+import { User, MessageSquare, BarChart, BookmarkIcon, HomeIcon } from "lucide-react";
 import UserAvatarServer from "../../app/actions/userAvatar";
 
 export async function GetTraineeSideLinks() {
@@ -14,7 +14,8 @@ export async function GetTraineeSideLinks() {
     }
 
     return [
-        { href: "/trainee/progress", label: "Progress", icon: <BarChart className="h-5 w-5" /> },
+        { href: "/trainee", label: "Home", icon: <HomeIcon className="h-5 w-5" /> },
+        { href: "/trainee/programs", label: "Programs", icon: <BarChart className="h-5 w-5" /> },
         { href: "/trainee/bookings", label: "Bookings", icon: <BookmarkIcon className="h-5 w-5" /> },
         { href: "/trainee/messages", label: "Messages", icon: <MessageSquare className="h-5 w-5" /> },
         { href: `/${ownProfile.role}/profile/${ownProfile.id}`, label: "Profile", icon: <User className="h-5 w-5" /> },

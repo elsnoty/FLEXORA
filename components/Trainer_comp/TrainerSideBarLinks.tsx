@@ -1,4 +1,4 @@
-import { User, Dumbbell, MessageSquare, Users, CalendarCheck } from "lucide-react";
+import { User, Dumbbell, MessageSquare, Users, CalendarCheck, HomeIcon } from "lucide-react";
 import UserAvatarServer from "../../app/actions/userAvatar";
 
 export async function GetTrainerSideLinks() {
@@ -14,6 +14,7 @@ export async function GetTrainerSideLinks() {
     }
 
     return [
+        { href: "/trainer", label: "Home", icon: <HomeIcon className="h-5 w-5" /> },
         { href: "/trainer/clients", label: "Clients", icon: <Users className="h-5 w-5" /> },
         { href: "/trainer/sessions", label: "Sessions", icon: <CalendarCheck  className="h-5 w-5" /> },
         { href: "/trainer/programs", label: "Training Programs", icon: <Dumbbell className="h-5 w-5" /> },

@@ -9,13 +9,15 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import {
-  LogOut,
   Menu,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {useState } from "react";
 import { SidebarLink } from "@/Types/SideBarLinks";
+import Logo from "@/Public/Flexora-LogoV2.webp"
+import Image from "next/image";
+import LogoutButtonMenu from "../shared/LogoutButtonMenu";
 
 interface SidebarTraineeProps {
     links: SidebarLink[];
@@ -61,42 +63,45 @@ export default function SidebarTrainee({ links }: SidebarTraineeProps) {
             <SheetContent side="left" className="w-64 flex flex-col justify-between">
                 <div>
                 <SheetHeader>
-                <SheetTitle>Trainer Dashboard</SheetTitle>
+                <Link href="/">
+                <SheetTitle>
+                    <Image
+                        src={Logo}
+                        alt="Flexora Logo"
+                        width={120}
+                        height={120}
+                    />
+                </SheetTitle>
+                </Link>
                 <SheetDescription></SheetDescription>
                 </SheetHeader>
                 <nav className="flex flex-col gap-4 mt-6">
                 {renderLinks()}
                 </nav>
                 </div>
-
-                <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-3 text-sm font-medium text-red-500 mt-4"
-                >
-                    <LogOut className="h-5 w-5" />
-                    Logout
-                </button>
+                <LogoutButtonMenu onClick={handleLogout}/>    
             </SheetContent>
             </Sheet>
         </div>
 
         {/* Desktop Sidebar */}
-        <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:min-h-screen md:pt-4 md:mt-0 fixed top-[0] left-0 z-50 bg-background h-[calc(100vh-72px)]">
+        <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:min-h-screen md:pt-4 md:mt-0 fixed top-[-10px] left-0 z-50 bg-background h-[calc(100vh+10px)]">
     <div className="flex flex-col justify-between h-full p-4">
         {/* Top Navigation Links */}
         <nav className="flex flex-col gap-4">
-        <h1 className="text-2xl font-bold">Trainer Dashboard</h1>
+        <Link href="/">
+            <Image
+                src={Logo}
+                alt="Flexora Logo"
+                width={120}
+                height={120}
+            />
+                </Link>
           {renderLinks()}
         </nav>
 
         {/* Bottom Logout */}
-        <button
-        onClick={handleLogout}
-        className="flex items-center gap-3 text-sm font-medium text-red-500"
-        >
-        <LogOut className="h-5 w-5" />
-        Logout
-        </button>
+        <LogoutButtonMenu onClick={handleLogout}/>    
     </div>
     </aside>
         </>
