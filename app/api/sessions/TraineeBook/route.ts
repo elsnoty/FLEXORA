@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
     const body = await req.json();
-    const { trainerId, date, durationHours = 1 } = body;
+    const { trainerId, startTime, endTime, durationHours = 1 } = body;
 
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
@@ -14,8 +14,8 @@ export async function POST(req: Request) {
     const { error } = await supabase.from("sessions").insert({
         trainer_id: trainerId,
         trainee_id: user.id,
-        start_time: date,
-        end_time: new Date(new Date(date).getTime() + durationHours * 60 * 60 * 1000),
+        start_time: startTime, // Already in ISO format
+        end_time: endTime,     // Already in ISO format
         status: "pending",
         duration_hours: durationHours,
         payment_status: "unpaid",

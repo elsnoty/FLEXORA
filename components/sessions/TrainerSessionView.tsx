@@ -25,8 +25,19 @@ export default function TrainerSessionView({ sessions }: { sessions: SessionView
                 </div>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                {new Date(session.start_time).toLocaleString()} →{' '}
-                {new Date(session.end_time).toLocaleTimeString()}
+                    {new Date(session.start_time).toLocaleString('en-US', { 
+                        timeZone: 'Africa/Cairo',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })} →{' '}
+                    {new Date(session.end_time).toLocaleTimeString('en-US', { 
+                        timeZone: 'Africa/Cairo',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })}
                 </div>
                 <div className="mt-1 text-xs text-gray-500 capitalize">
                 Status: {session.status}

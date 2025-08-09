@@ -44,7 +44,9 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
 
     const startTime = new Date(date);
     startTime.setHours(selectedTime.getHours(), selectedTime.getMinutes(), 0, 0);
-
+    // Calculate end time in local time
+    const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
+    
     setLoading(true);
     try {
         const res = await fetch("/api/sessions/TraineeBook", {
@@ -52,7 +54,8 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 trainerId,
-                date: startTime.toISOString(),
+                startTime: startTime.toISOString(),
+                endTime: endTime.toISOString(),
                 durationHours: duration,
             }),
         });
@@ -129,6 +132,7 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
                 <TimeSlotPicker 
                     value={selectedTime} 
                     onChange={setSelectedTime} 
+                    date={date}
                 />
                 <DurationPicker 
                     value={duration} 

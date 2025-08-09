@@ -87,11 +87,19 @@ export default async function TraineeBookingsPage() {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
-                    <span>
-                      {new Date(session.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })} -{" "}
-                      {new Date(session.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
-                    </span>
+                      <Clock className="w-4 h-4 text-muted-foreground" />
+                      <span>
+                          {new Date(session.start_time).toLocaleTimeString([], { 
+                              hour: '2-digit', 
+                              minute: '2-digit',
+                              hour12: true 
+                          })} -{" "}
+                          {new Date(session.end_time).toLocaleTimeString([], { 
+                              hour: '2-digit', 
+                              minute: '2-digit',
+                              hour12: true 
+                          })}
+                      </span>
                   </div>
                   {session.status === "rejected" && (
                     <div className="flex items-center gap-2">
