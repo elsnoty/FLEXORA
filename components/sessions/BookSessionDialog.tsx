@@ -99,7 +99,7 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
 
         <PopoverContent 
             className="w-[90vw] max-w-md p-4 space-y-4" 
-            align="start"
+            align="center"
             onInteractOutside={(e) => {
             if ((e.target as HTMLElement).closest('.rdp')) {
                 e.preventDefault();
@@ -116,7 +116,11 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                disabled={(date) => date < new Date()}
+                disabled={(day) => {
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0); 
+                    return day < today;
+                }}
                 />
             </div>
 

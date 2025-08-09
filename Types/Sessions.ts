@@ -10,7 +10,7 @@ rejection_reason?: string;
 };
 
 
-export interface BookingSessions{
+export interface BookingSessionsTrainee{
     id: string;
     start_time: string;
     end_time: string;
@@ -19,4 +19,5 @@ export interface BookingSessions{
     trainer_name: string;  
     trainer_avatar: string;
     payment_status: string;
+    trainer_id:string;
 }

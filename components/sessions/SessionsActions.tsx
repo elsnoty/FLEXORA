@@ -3,23 +3,40 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { updateSessionStatus } from "@/app/actions/sessions";
+import { updateSessionStatus,  } from "@/app/actions/sessions";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { handleError } from "@/utils/errorHandling";
 
 export function SessionActions({ sessionId }: { sessionId: string }) {
     const { toast } = useToast();
     const router = useRouter();
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [rejectionReason, setRejectionReason] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleAccept = async () => {
+
+        setIsLoading(true);
         try {
-        await updateSessionStatus(sessionId, 'accepted');
-        toast({ title: "Session accepted" });
-        router.refresh();
-        } catch {
-        toast({ title: "Error accepting session", variant: "destructive" });
+            const result = await updateSessionStatus(sessionId, 'accepted');
+            if (result?.success) {
+            toast({ title: "Session accepted!" });
+            router.refresh();
+            } else {
+            toast({
+                title: "Couldn't accept session",
+                description: result?.error || "Time conflict exists",
+                variant: "destructive"
+            });
+            setIsLoading(false);
+            }
+        } catch (error) {
+            toast({
+            title: "Unexpected error",
+            description: handleError(error,"Please try again later"),
+            variant: "destructive" 
+            });
         }
     };
 
@@ -37,8 +54,8 @@ export function SessionActions({ sessionId }: { sessionId: string }) {
 
     return (
         <div className="flex gap-2 mt-3">
-        <Button onClick={handleAccept}>
-            Accept
+        <Button onClick={handleAccept} disabled={isLoading}>
+        {isLoading ? "Processing..." : "Accept"}
         </Button>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

@@ -6,18 +6,29 @@ import { format } from "date-fns";
 
 const generateTimeSlots = () => {
     const slots = [];
-    for (let hour = 8; hour <= 20; hour++) {
+    const now = new Date();
+
+    for (let hour = 8; hour <= 23; hour++) {
         for (let minute = 0; minute < 60; minute += 30) {
-        const time = new Date();
-        time.setHours(hour, minute, 0, 0);
-        slots.push({
-            value: time,
-            label: format(time, "h:mm a"),
-        });
+            const time = new Date();
+            time.setHours(hour, minute, 0, 0);
+
+            const isToday =
+                time.getDate() === now.getDate() &&
+                time.getMonth() === now.getMonth() &&
+                time.getFullYear() === now.getFullYear();
+
+            if (isToday && time <= now) continue;
+
+            slots.push({
+                value: time,
+                label: format(time, "h:mm a"),
+            });
         }
     }
     return slots;
 };
+
 
 export function TimeSlotPicker({
     value,

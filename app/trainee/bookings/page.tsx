@@ -3,11 +3,12 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookingSessions } from "@/Types/Sessions";
+import { BookingSessionsTrainee } from "@/Types/Sessions";
 import { PayButton } from "./PayMobSessionBTN";
 import Image from "next/image";
 import { CalendarDays, Clock, Info } from "lucide-react";
 import { getUserMetadata } from "@/lib/user-metadata";
+import Link from "next/link";
 
 export async function generateMetadata() {
   return getUserMetadata({
@@ -30,7 +31,7 @@ export default async function TraineeBookingsPage() {
     .eq("trainee_id", user.id)
     .order("start_time", { ascending: false });
 
-    const typedSessions = sessions as BookingSessions[] | null;
+    const typedSessions = sessions as BookingSessionsTrainee[] | null;
 
   return (
     <div className="max-w-4xl mx-auto p-4 space-y-6">
@@ -52,7 +53,9 @@ export default async function TraineeBookingsPage() {
                     className="rounded-full border object-cover"
                   />
                   <div>
-                    <h3 className="font-semibold text-base">{session.trainer_name}</h3>
+                    <Link href={`/trainee/suggestion/${session.trainer_id}`}>
+                      <h3 className="font-semibold text-base">{session.trainer_name}</h3>
+                    </Link>
                     <p className="text-sm text-muted-foreground">Trainer</p>
                   </div>
                 </div>
@@ -86,8 +89,8 @@ export default async function TraineeBookingsPage() {
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-muted-foreground" />
                     <span>
-                      {new Date(session.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{" "}
-                      {new Date(session.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(session.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })} -{" "}
+                      {new Date(session.end_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}
                     </span>
                   </div>
                   {session.status === "rejected" && (

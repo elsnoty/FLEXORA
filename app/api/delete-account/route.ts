@@ -70,7 +70,7 @@ export async function POST(request: Request) {
         // Ensure user can only delete their own account
         if (user.id !== userId) {
             return NextResponse.json(
-                { error: 'Forbidden - You can only delete your own account' },
+                { error: 'Forbidden - Delete Your Account Only Phsyco 💩🤏' },
                 { status: 403 }
             );
         }
