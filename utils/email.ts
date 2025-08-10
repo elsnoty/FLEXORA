@@ -97,7 +97,7 @@ html,
 
 try {
 const info = await transporter.sendMail(mailOptions)
-console.log(`Reminder email sent to ${email}:`, info.messageId)
+// console.log(`Reminder email sent to ${email}:`, info.messageId)
 return { success: true, messageId: info.messageId }
 } catch (error) {
 console.error(`Error sending reminder email to ${email}:`, error)
