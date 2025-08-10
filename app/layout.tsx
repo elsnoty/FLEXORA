@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import {Outfit, Urbanist} from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: {
@@ -38,9 +39,11 @@ export default function RootLayout({
         <ThemeProvider
             attribute={"class"} enableSystem
           >
+            <TooltipProvider delayDuration={300}>
               {children}
               <Analytics/>
               <SpeedInsights />
+            </TooltipProvider>
           </ThemeProvider>
         <Toaster />
       </body>

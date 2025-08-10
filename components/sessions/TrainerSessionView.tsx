@@ -2,6 +2,7 @@
 import { SessionView } from "@/Types/Sessions";
 import Image from "next/image";
 import { SessionActions } from "./SessionsActions";
+import { TimeDisplay } from "../TImeDisplay";
 
 export default function TrainerSessionView({ sessions }: { sessions: SessionView[] }) {
     return (
@@ -24,21 +25,7 @@ export default function TrainerSessionView({ sessions }: { sessions: SessionView
                     {session.trainee_name}
                 </div>
                 </div>
-                <div className="text-sm text-muted-foreground">
-                    {new Date(session.start_time).toLocaleString('en-US', { 
-                        timeZone: 'Africa/Cairo',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })} →{' '}
-                    {new Date(session.end_time).toLocaleTimeString('en-US', { 
-                        timeZone: 'Africa/Cairo',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    })}
-                </div>
+<TimeDisplay startTime={session.start_time} endTime={session.end_time} />
                 <div className="mt-1 text-xs text-gray-500 capitalize">
                 Status: {session.status}
                 {session.rejection_reason && (

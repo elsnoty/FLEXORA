@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { BookingSessionsTrainee } from "@/Types/Sessions";
 import { PayButton } from "./PayMobSessionBTN";
 import Image from "next/image";
-import { CalendarDays, Clock, Info } from "lucide-react";
+import { CalendarDays, Info } from "lucide-react";
 import { getUserMetadata } from "@/lib/user-metadata";
 import Link from "next/link";
+import { TimeDisplay } from "@/components/TImeDisplay";
 
 export async function generateMetadata() {
   return getUserMetadata({
@@ -86,21 +87,7 @@ export default async function TraineeBookingsPage() {
                       {new Date(session.start_time).toLocaleDateString()}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-muted-foreground" />
-                      <span>
-                          {new Date(session.start_time).toLocaleTimeString([], { 
-                              hour: '2-digit', 
-                              minute: '2-digit',
-                              hour12: true 
-                          })} -{" "}
-                          {new Date(session.end_time).toLocaleTimeString([], { 
-                              hour: '2-digit', 
-                              minute: '2-digit',
-                              hour12: true 
-                          })}
-                      </span>
-                  </div>
+                    <TimeDisplay startTime={session.start_time} endTime={session.end_time} />
                   {session.status === "rejected" && (
                     <div className="flex items-center gap-2">
                       <Info className="w-4 h-4 text-muted-foreground" />
