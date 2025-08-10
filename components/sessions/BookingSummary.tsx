@@ -1,6 +1,5 @@
 'use client';
 import { format, addHours } from "date-fns";
-import { ar } from "date-fns/locale";
 export function BookingSummary({
     date,
     time,

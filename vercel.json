@@ -1,0 +1,9 @@
+{
+    "crons": [
+      {
+        "path": "/api/cron/reminders",
+        "schedule": "*/15 * * * *",
+        "headers": { "x-cron-secret": "bfd677bf177406f6fcd6d8fd394cb7264f990e5961e664cd9514eec8f8bb1ed5" }
+      }
+    ]
+  }

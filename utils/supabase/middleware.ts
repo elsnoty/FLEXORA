@@ -4,6 +4,14 @@ import { NextResponse, type NextRequest } from "next/server";
 export async function updateSession(request: NextRequest) {
   let response = NextResponse.next();
 
+  if (request.nextUrl.pathname.startsWith("/api/cron/reminders")) {
+    const cronSecret = request.headers.get('x-cron-secret');
+    if (cronSecret !== process.env.CRON_SECRET) {
+      return new NextResponse('Unauthorized', { status: 401 });
+    }
+    return response;
+  }
+
   const publicRoutes = [
     "/auth/callback",
     "/api/logout",
