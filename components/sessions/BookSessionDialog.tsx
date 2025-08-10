@@ -5,7 +5,7 @@ import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Calendar as CalendarIcon } from "lucide-react";
-import { BookingSummary } from "./BookingSummary";
+// import { BookingSummary } from "./BookingSummary";
 import { DurationPicker } from "./durationPicker";
 import { TimeSlotPicker } from "./TimeSLotPicker";
 import { useRouter } from "next/navigation";
@@ -138,11 +138,11 @@ export default function BookSessionPopover({ trainerId }: { trainerId: string })
                     value={duration} 
                     onChange={setDuration} 
                 />
-                <BookingSummary 
+                {/* <BookingSummary 
                     date={date} 
                     time={selectedTime} 
                     duration={duration} 
-                />
+                /> */}
                 </>
             )}
 
