@@ -3,6 +3,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import {Outfit, Urbanist} from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
   title: {
@@ -37,6 +39,8 @@ export default function RootLayout({
             attribute={"class"} enableSystem
           >
               {children}
+              <Analytics/>
+              <SpeedInsights />
           </ThemeProvider>
         <Toaster />
       </body>
