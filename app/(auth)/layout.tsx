@@ -2,18 +2,14 @@ import { authMetadata } from "@/lib/auth-metadata";
 
 interface AuthLayoutProps {
     children: React.ReactNode;
-    params: { segment?: string };
+    params: Promise<{ segment?: string }>; 
 }
 
-export async function generateMetadata({ params }: { params: { segment?: string } }) {
-  // Dynamically select metadata based on route segment
-    return params.segment ? authMetadata[params.segment] : authMetadata.login;
+export async function generateMetadata({ params }: { params: Promise<{ segment?: string }> }) {
+    const resolvedParams = await params;
+    return resolvedParams.segment ? authMetadata[resolvedParams.segment] : authMetadata.login;
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
-    return (
-        <>
-            {children}
-        </>
-    );
+    return <>{children}</>;
 }
