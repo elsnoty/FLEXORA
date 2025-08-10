@@ -1,5 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 'use client';
-import { format, addHours } from "date-fns";
+import { format } from "date-fns/format";
+import { addHours } from "date-fns/addHours";
 
 export function BookingSummary({
     date,
