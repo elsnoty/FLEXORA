@@ -9,7 +9,12 @@ export default function TrainerSessionView({ sessions }: { sessions: SessionView
         <div className="max-w-3xl mx-auto p-6 space-y-4">
         <h1 className="text-2xl font-semibold mb-4">Booked Sessions</h1>
         <ul className="space-y-4">
-            {sessions.map((session) => (
+            {sessions.map((session) => {
+                const sessionStartTime = new Date(session.start_time);
+                const currentTime = new Date();
+                const isPastSession = sessionStartTime < currentTime;
+
+                return (
             <li key={session.id} className="border p-4 rounded-md shadow-sm">
                 <div className="flex items-center gap-3">
                 {session.trainee_avatar && (
@@ -23,6 +28,11 @@ export default function TrainerSessionView({ sessions }: { sessions: SessionView
                 )}
                 <div className="font-medium">
                     {session.trainee_name}
+                    {isPastSession && session.status === 'pending' && (
+                        <span className="ml-2 text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded">
+                            Time Passed
+                        </span>
+                    )}
                 </div>
                 </div>
 <TimeDisplay startTime={session.start_time} endTime={session.end_time} />
@@ -34,12 +44,17 @@ export default function TrainerSessionView({ sessions }: { sessions: SessionView
                 </div>
                 
                 {session.status === 'pending' && (
-                <SessionActions 
-                    sessionId={session.id} 
-                />
+                    isPastSession ? (
+                        <div className="mt-3 text-sm text-muted-foreground italic">
+                            Cannot accept - session time has passed
+                        </div>
+                    ) : (
+                        <SessionActions sessionId={session.id} />
+                    )
                 )}
             </li>
-            ))}
+                );
+            })}
         </ul>
         </div>
     );

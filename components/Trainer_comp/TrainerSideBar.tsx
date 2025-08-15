@@ -9,6 +9,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import {
+    ArrowLeft,
   Menu,
 } from "lucide-react";
 import Link from "next/link";
@@ -21,19 +22,20 @@ import LogoutButtonMenu from "../shared/LogoutButtonMenu";
 
 interface SidebarTraineeProps {
     links: SidebarLink[];
-  }
+    }
 
 export default function SidebarTrainee({ links }: SidebarTraineeProps) {
     const [open, setOpen] = useState(false);
+    const [desktopSidebarOpen, setDesktopSidebarOpen] = useState(true);
     const router = useRouter();
-  
+
     const handleLogout = async () => {
-      const res = await fetch("/api/logout", { method: "POST" });
-      if (res.ok) {
-        router.push("/login");
-      } else {
-        router.push("/error");
-      }
+        const res = await fetch("/api/logout", { method: "POST" });
+        if (res.ok) {
+            router.push("/login");
+        } else {
+            router.push("/error");
+        }
     };
     const renderLinks = () => (
         <>
@@ -85,25 +87,40 @@ export default function SidebarTrainee({ links }: SidebarTraineeProps) {
         </div>
 
         {/* Desktop Sidebar */}
-        <aside className="hidden md:flex md:w-64 md:flex-col md:border-r md:min-h-screen md:pt-4 md:mt-0 fixed top-[-10px] left-0 z-50 bg-background h-[calc(100vh+10px)]">
-    <div className="flex flex-col justify-between h-full p-4">
-        {/* Top Navigation Links */}
-        <nav className="flex flex-col gap-4">
-        <Link href="/">
-            <Image
-                src={Logo}
-                alt="Flexora Logo"
-                width={120}
-                height={120}
-            />
-                </Link>
-          {renderLinks()}
-        </nav>
+        <div className="hidden md:block relative">
+            <aside
+            className={`md:flex md:w-64 md:flex-col md:min-h-screen md:pt-4 md:mt-0 fixed top-[-10px] left-0 z-40 bg-background h-[calc(100vh+10px)] transition-transform duration-300 ease-in-out ${
+                desktopSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
+            >
+            <div className="flex flex-col justify-between h-full p-4">
+                <nav className="flex flex-col gap-4">
+                    <div className="relative flex items-center">
 
-        {/* Bottom Logout */}
-        <LogoutButtonMenu onClick={handleLogout}/>    
-    </div>
-    </aside>
+                <Link href="/">
+                    <Image
+                    src={Logo}
+                    alt="Flexora Logo"
+                    width={120}
+                    height={120}
+                    className="transition-transform duration-300 hover:scale-105"
+                    />
+                </Link>
+                <button
+                    className="p-2 absolute top-0 -right-14 z-50 rounded-md hover:bg-accent transition-all duration-200"
+                    onClick={() => setDesktopSidebarOpen(!desktopSidebarOpen)}
+                    >
+                    <ArrowLeft className={`h-5 w-5 transition-transform duration-200 ${desktopSidebarOpen ? '' : 'rotate-180'}`} />
+                </button>
+                    </div>
+                {renderLinks()}
+                </nav>
+                <div className="relative items-center">
+                <LogoutButtonMenu onClick={handleLogout} />
+                </div>
+            </div>
+            </aside>
+        </div>
         </>
     );
 }

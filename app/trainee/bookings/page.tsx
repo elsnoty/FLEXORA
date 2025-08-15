@@ -42,7 +42,12 @@ export default async function TraineeBookingsPage() {
           <p className="text-muted-foreground text-lg">You haven&apos;t booked any sessions yet.</p>
           ) : typedSessions && (
             <div className="space-y-4">
-              {typedSessions.map((session) => (
+              {typedSessions.map((session) => {
+                const sessionStartTime = new Date(session.start_time);
+                const currentTime = new Date();
+                const isSessionPassed = sessionStartTime < currentTime;
+                
+                return (
             <Card key={session.id} className="shadow-md rounded-2xl border border-gray-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 p-4">
                 <div className="flex items-center gap-3">
@@ -99,7 +104,7 @@ export default async function TraineeBookingsPage() {
                   )}
                 </div>
 
-                {session.status === 'accepted' && (
+                {session.status === 'accepted' && !isSessionPassed && (
                   <div className="mt-4">
                     {session.payment_status === 'paid' ? (
                       <div className="border border-blue-200 bg-blue-50 text-blue-900 rounded-xl p-4 shadow-sm">
@@ -118,9 +123,30 @@ export default async function TraineeBookingsPage() {
                     )}
                   </div>
                 )}
+
+                {session.status === 'accepted' && isSessionPassed && (
+                  <div className="mt-4">
+                    {session.payment_status === 'paid' ? (
+                      <div className="border border-gray-200 bg-gray-50 text-gray-700 rounded-xl p-4 shadow-sm">
+                        <p className="font-semibold">Session Completed</p>
+                        <p className="text-sm text-muted-foreground">
+                          This session time has passed.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="border border-red-200 bg-red-50 text-red-900 rounded-xl p-4 shadow-sm">
+                        <p className="font-semibold">Session Expired</p>
+                        <p className="text-sm text-muted-foreground">
+                          Session time passed without payment. Please book a new session.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </CardContent>
             </Card>
-          ))}
+                );
+          })}
         </div>
       )}
     </div>

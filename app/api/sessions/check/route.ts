@@ -24,18 +24,25 @@ export async function GET(req: Request) {
     }
 
     try {
+    // Get current time for comparison
+    const currentTime = new Date().toISOString();
+    
     const { data, error } = await supabase
         .from("sessions")
-        .select("id, status")
+        .select("id, status, start_time")
         .eq("trainer_id", trainerId)
         .eq("trainee_id", user.id)
         .in("status", ["pending", "accepted"])
+        .gte("start_time", currentTime) // Only future sessions
         .limit(1);
 
     if (error) throw error;
 
+    // Check if there's any pending or accepted session that's still in the future
+    const hasActiveBooking = data.length > 0;
+
     return NextResponse.json({ 
-        hasBooked: data.length > 0,
+        hasBooked: hasActiveBooking,
         currentStatus: data[0]?.status || null 
     });
     

@@ -16,7 +16,6 @@ export function SessionActions({ sessionId }: { sessionId: string }) {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleAccept = async () => {
-
         setIsLoading(true);
         try {
             const result = await updateSessionStatus(sessionId, 'accepted');

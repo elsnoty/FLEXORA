@@ -11,6 +11,17 @@ export async function POST(req: Request) {
 
     if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+    // Simple validation: Check if session time is in the future
+    const sessionStartTime = new Date(startTime);
+    const currentTime = new Date();
+
+    if (sessionStartTime <= currentTime) {
+        return NextResponse.json(
+            { error: "Cannot book sessions for past times" }, 
+            { status: 400 }
+        );
+    }
+
     const { error } = await supabase.from("sessions").insert({
         trainer_id: trainerId,
         trainee_id: user.id,
